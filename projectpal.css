@@ -1,0 +1,66 @@
+/* ProjectPal shared styles */
+
+* {
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.shadow-soft {
+  box-shadow: 0 12px 30px rgba(16, 42, 67, 0.08);
+}
+
+.premium-glow {
+  background: linear-gradient(135deg, #102A43, #0F766E);
+}
+
+/* Toast notifications (used by projectpal.js) */
+.pp-toast-fixed {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 20px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  z-index: 100;
+  box-shadow: 0 10px 25px rgba(0,0,0,.2);
+}
+.pp-toast-enter { animation: ppToastIn .25s ease-out forwards; }
+.pp-toast-exit { animation: ppToastOut .25s ease-in forwards; }
+@keyframes ppToastIn { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes ppToastOut { from { opacity: 1; } to { opacity: 0; } }
+
+/* Page switcher nav (used by projectpal.js) */
+.pp-nav-fixed {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 90;
+}
+.pp-nav-menu {
+  position: absolute;
+  bottom: 48px;
+  right: 0;
+  width: 220px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(16,42,67,.18);
+  padding: 8px;
+}
+
+/* Page transition overlay (used by projectpal.js) */
+.pp-page-transition {
+  position: fixed;
+  inset: 0;
+  background: #102A43;
+  opacity: 0;
+  z-index: 200;
+  pointer-events: none;
+  transition: opacity .4s ease;
+}
+.pp-page-transition.appear { opacity: 1; }

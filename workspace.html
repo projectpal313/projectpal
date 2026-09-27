@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Academic Workspace - ProjectPal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="projectpal.css">
+  <style>body{background:#F5F7FA;color:#334155}.stage-card{transition:all .3s ease}.stage-card.active{border-color:#0F766E;box-shadow:0 0 0 2px rgba(15,118,110,.15)}.stage-card.completed{border-color:#0D9488;background:#f0fdfa}.stage-card.locked{opacity:.5;pointer-events:none}.lit-card{transition:all .2s ease}.lit-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(15,118,110,.1)}.lit-card.selected{border-color:#0F766E;background:#f0fdfa}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}.fade-up{animation:fadeUp .4s ease-out}</style>
+</head>
+<body class="min-h-screen">
+  <header class="bg-white border-b border-slate-200">
+    <div class="mx-auto flex max-w-[90rem] items-center justify-between px-5 py-4 sm:px-8">
+      <a href="welcome-hub.html" class="flex items-center gap-2 text-lg font-extrabold text-ink"><span class="grid h-10 w-10 place-items-center rounded-xl bg-ocean text-white">P</span>ProjectPal</a>
+      <a href="dashboard.html" class="rounded-xl border border-slate-200 px-4 py-2 text-sm font-bold text-ink hover:bg-slate-50">&larr; Back to Dashboard</a>
+    </div>
+  </header>
+  <div class="mx-auto max-w-[90rem] px-5 py-8 sm:px-8">
+    <div class="flex justify-center mb-8"><div class="flex space-x-8">
+      <div class="flex items-center space-x-3"><div class="w-8 h-8 rounded-full bg-ocean text-white flex items-center justify-center text-xs font-medium">1</div><span class="hidden sm:block text-sm font-medium text-slate-600">Scope</span></div>
+      <div class="flex-1"><div class="h-1 bg-slate-200 rounded-full"></div></div>
+      <div class="flex items-center space-x-3"><div class="w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-medium">2</div><span class="hidden sm:block text-sm font-medium text-slate-600">Literature</span></div>
+      <div class="flex-1"><div class="h-1 bg-slate-200 rounded-full"></div></div>
+      <div class="flex items-center space-x-3"><div class="w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-medium">3</div><span class="hidden sm:block text-sm font-medium text-slate-600">Methodology</span></div>
+      <div class="flex-1"><div class="h-1 bg-slate-200 rounded-full"></div></div>
+      <div class="flex items-center space-x-3"><div class="w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-medium">4</div><span class="hidden sm:block text-sm font-medium text-slate-600">Drafting</span></div>
+      <div class="flex-1"><div class="h-1 bg-slate-200 rounded-full"></div></div>
+      <div class="flex items-center space-x-3"><div class="w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-medium">5</div><span class="hidden sm:block text-sm font-medium text-slate-600">Defense</span></div>
+    </div></div>
+    <div class="bg-white rounded-2xl shadow-xl p-6 space-y-6">
+      <!-- Stage 1: Scope Definition -->
+      <section id="stage-1" class="stage-card active space-y-4 fade-up">
+        <h2 class="text-xl font-bold text-ink flex items-center gap-2"><span class="bg-ocean/10 text-ocean rounded-full w-8 h-8 flex items-center justify-center">1</span>Scope Definition & Diagnostic Gate</h2>
+        <p class="text-slate-600">Define your research scope with three key elements.</p>
+        <div class="space-y-4">
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">1. Geographic Scope/Region</label><input type="text" id="geoScope" placeholder="e.g., Lagos, Nigeria" class="w-full rounded-xl border border-slate-300 px-4 py-2"></div>
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">2. Target Sample / Case Study Unit</label><input type="text" id="targetSample" placeholder="e.g., SMEs with under 50 employees" class="w-full rounded-xl border border-slate-300 px-4 py-2"></div>
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">3. Core Problem / Primary Objective Statement</label><textarea id="coreProblem" rows="3" placeholder="What specific problem does your research address?" class="w-full rounded-xl border border-slate-300 px-4 py-2"></textarea></div>
+        </div>
+        <button id="validateScopeBtn" class="w-full rounded-xl bg-ocean px-5 py-3 font-bold text-white hover:bg-teal-800" disabled>Validate Scope & Proceed</button>
+        <div id="stage1-error" class="mt-3 text-sm text-red-500 hidden"></div>
+      </section>
+
+      <!-- Stage 2: Micro-Literature Review -->
+      <section id="stage-2" class="stage-card locked space-y-4 fade-up hidden">
+        <h2 class="text-xl font-bold text-ink flex items-center gap-2"><span class="bg-ocean/10 text-ocean rounded-full w-8 h-8 flex items-center justify-center">2</span>Micro-Literature Review</h2>
+        <p class="text-slate-600">Select at least 2 cards to cite before proceeding.</p>
+        <div class="grid gap-4 md:grid-cols-1 lg:grid-cols-3">
+          <div class="lit-card rounded-xl border border-slate-300 p-4" data-card="1">
+            <h3 class="font-semibold text-ocean mb-2">Urban Informal Economy</h3>
+            <p class="text-sm text-slate-600"><strong>Finding:</strong> Informal sector contributes 65% of Lagos employment but remains undocumented.</p>
+            <p class="text-sm text-slate-600"><strong>Method:</strong> Mixed-methods: 300 surveys + 25 interviews.</p>
+            <p class="text-sm text-slate-600"><strong>Gap:</strong> Limited longitudinal data on survival.</p>
+          </div>
+          <div class="lit-card rounded-xl border border-slate-300 p-4" data-card="2">
+            <h3 class="font-semibold text-ocean mb-2">SME Digital Adoption</h3>
+            <p class="text-sm text-slate-600"><strong>Finding:</strong> 78% of Nigerian SMEs cite high internet costs as barrier.</p>
+            <p class="text-sm text-slate-600"><strong>Method:</strong> 450 SME survey via questionnaires.</p>
+            <p class="text-sm text-slate-600"><strong>Gap:</strong> Lack of gender comparison studies.</p>
+          </div>
+          <div class="lit-card rounded-xl border border-slate-300 p-4" data-card="3">
+            <h3 class="font-semibold text-ocean mb-2">Youth Entrepreneurship</h3>
+            <p class="text-sm text-slate-600"><strong>Finding:</strong> Youth show 40% higher innovation, 30% higher failure.</p>
+            <p class="text-sm text-slate-600"><strong>Method:</strong> 15 case studies over 12 months.</p>
+            <p class="text-sm text-slate-600"><strong>Gap:</strong> Minimal mentorship research.</p>
+          </div>
+        </div>
+        <div class="flex items-center justify-between mt-4"><span id="litSelectionCount" class="text-sm">0/2 selected</span><button id="proceedToMethodologyBtn" class="rounded-xl bg-ocean/20 px-5 py-2 font-semibold text-ocean hover:bg-ocean/30" disabled>Proceed to Methodology</button></div>
+        <div id="stage2-error" class="mt-2 text-sm text-red-500 hidden"></div>
+      </section>
+
+      <!-- Stage 3: Guided Data & Methodology Input -->
+      <section id="stage-3" class="stage-card locked space-y-4 fade-up hidden">
+        <h2 class="text-xl font-bold text-ink flex items-center gap-2"><span class="bg-ocean/10 text-ocean rounded-full w-8 h-8 flex items-center justify-center">3</span>Guided Data & Methodology Input</h2>
+        <p class="text-slate-600">Define your research approach with guided inputs.</p>
+        <div class="space-y-4">
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">Research Design Selection</label><select id="researchDesign" class="w-full rounded-xl border border-slate-300 px-4 py-2"><option value="">Select Research Design</option><option value="qualitative">Qualitative</option><option value="quantitative">Quantitative</option><option value="mixed">Mixed Methods</option></select></div>
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">Sample Size & Data Collection Instrument</label><input type="text" id="sampleSize" placeholder="e.g., 100 Survey Respondents via Questionnaires" class="w-full rounded-xl border border-slate-300 px-4 py-2"></div>
+        </div>
+        <div class="bg-ocean/5 rounded-xl p-4"><h3 class="font-semibold text-ocean mb-2">Methodology Preview</h3><p id="methodologyText" class="text-sm text-slate-700">Complete the fields above to see your methodology summary.</p></div>
+        <button id="proceedToDraftingBtn" class="w-full rounded-xl bg-ocean px-5 py-3 font-bold text-white hover:bg-teal-800" disabled>Proceed to Chapter Drafting</button>
+        <div id="stage3-error" class="mt-3 text-sm text-red-500 hidden"></div>
+      </section>
+
+      <!-- Stage 4: Outlined Drafting & Guided Content -->
+      <section id="stage-4" class="stage-card locked space-y-4 fade-up hidden">
+        <h2 class="text-xl font-bold text-ink flex items-center gap-2"><span class="bg-ocean/10 text-ocean rounded-full w-8 h-8 flex items-center justify-center">4</span>Outlined Drafting & Guided Content</h2>
+        <p class="text-slate-600">Develop chapters with interactive scaffolding blocks.</p>
+        <div class="space-y-3" id="chapterAccordion">
+          <div class="border rounded-lg overflow-hidden">
+            <div class="bg-ocean/5 px-4 py-3 cursor-pointer flex justify-between items-center" onclick="toggleChapter(1)">
+              <span class="font-semibold text-ocean">Chapter 1: Introduction</span><span id="ch1-icon" class="text-ocean transition-transform">&#9656;</span>
+            </div>
+            <div id="ch1-content" class="hidden p-4 text-sm text-slate-600">Problem Statement, Significance, Research Questions</div>
+          </div>
+          <div class="border rounded-lg overflow-hidden">
+            <div class="bg-ocean/5 px-4 py-3 cursor-pointer flex justify-between items-center" onclick="toggleChapter(2)">
+              <span class="font-semibold text-ocean">Chapter 2: Literature Review</span><span id="ch2-icon" class="text-ocean transition-transform">&#9656;</span>
+            </div>
+            <div id="ch2-content" class="hidden p-4 text-sm text-slate-600">Research Gap, Theoretical Framework, Empirical Review</div>
+          </div>
+          <div class="border rounded-lg overflow-hidden">
+            <div class="bg-ocean/5 px-4 py-3 cursor-pointer flex justify-between items-center" onclick="toggleChapter(3)">
+              <span class="font-semibold text-ocean">Chapter 3: Methodology</span><span id="ch3-icon" class="text-ocean transition-transform">&#9656;</span>
+            </div>
+            <div id="ch3-content" class="hidden p-4 text-sm text-slate-600">Research Design, Sample & Sampling, Data Collection</div>
+          </div>
+          <div class="border rounded-lg overflow-hidden">
+            <div class="bg-ocean/5 px-4 py-3 cursor-pointer flex justify-between items-center" onclick="toggleChapter(4)">
+              <span class="font-semibold text-ocean">Chapter 4: Results & Discussion</span><span id="ch4-icon" class="text-ocean transition-transform">&#9656;</span>
+            </div>
+            <div id="ch4-content" class="hidden p-4 text-sm text-slate-600">Findings, Pattern Recognition, Literature Comparison</div>
+          </div>
+          <div class="border rounded-lg overflow-hidden">
+            <div class="bg-ocean/5 px-4 py-3 cursor-pointer flex justify-between items-center" onclick="toggleChapter(5)">
+              <span class="font-semibold text-ocean">Chapter 5: Conclusion & Recommendations</span><span id="ch5-icon" class="text-ocean transition-transform">&#9656;</span>
+            </div>
+            <div id="ch5-content" class="hidden p-4 text-sm text-slate-600">Summary, Conclusion, Limitations, Recommendations</div>
+          </div>
+        </div>
+        <button id="proceedToDefenseBtn" class="w-full rounded-xl bg-ocean px-5 py-3 font-bold text-white hover:bg-teal-800" disabled>Proceed to Defense Preparation</button>
+        <div id="stage4-error" class="mt-3 text-sm text-red-500 hidden"></div>
+      </section>
+
+      <!-- Stage 5: Defense Preparation Checkpoint -->
+      <section id="stage-5" class="stage-card locked space-y-4 fade-up hidden">
+        <h2 class="text-xl font-bold text-ink flex items-center gap-2"><span class="bg-ocean/10 text-ocean rounded-full w-8 h-8 flex items-center justify-center">5</span>Defense Preparation Checkpoint</h2>
+        <p class="text-slate-600">Verify readiness by answering three questions before export.</p>
+        <div class="space-y-4">
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">1. Core Problem Statement</label><textarea id="defenseQ1" rows="2" placeholder="In 1-2 sentences..." class="w-full rounded-xl border border-slate-300 px-4 py-2"></textarea></div>
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">2. Sampling Rationale</label><textarea id="defenseQ2" rows="2" placeholder="Explain sampling rationale..." class="w-full rounded-xl border border-slate-300 px-4 py-2"></textarea></div>
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">3. Primary Research Finding</label><textarea id="defenseQ3" rows="2" placeholder="State main discovery..." class="w-full rounded-xl border border-slate-300 px-4 py-2"></textarea></div>
+        </div>
+        <button id="submitDefenseBtn" class="w-full rounded-xl bg-ocean px-5 py-3 font-bold text-white hover:bg-teal-800">Submit Defense Preparation</button>
+        <div id="defenseResult" class="mt-4 text-center hidden">
+          <div id="defenseBadge" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"></div>
+          <p id="defenseMessage" class="mt-2 text-sm"></p>
+        </div>
+        <button id="exportProjectBtn" class="w-full rounded-xl bg-teal-600 px-6 py-3 font-bold text-white hover:bg-teal-700" disabled>Export Project (PDF/Word)</button>
+      </section>
+    </div>
+  </div>
+
+  <script src="projectpal.js"></script>
+  <script src="workspace.js"></script>
+</body>
+</html>

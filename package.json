@@ -1,0 +1,19 @@
+{
+  "name": "projectpal",
+  "version": "1.0.0",
+  "description": "ProjectPal - Academic Project Workspace",
+  "type": "module",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'Static site - no build needed'",
+    "test": "echo 'No tests specified'"
+  },
+    "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "nodemailer": "^6.9.7",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  }
+}
