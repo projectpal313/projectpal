@@ -1,41 +1,146 @@
-/* ProjectPal shared styles */
+/* ==========================================================================
+   ProjectPal — Academic Design System
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap');
+
+:root {
+  /* Colors — academic navy/slate + muted amber */
+  --pp-navy: #0F172A;
+  --pp-navy-soft: #1E293B;
+  --pp-university-blue: #1E3A8A;
+  --pp-accent: #D97706;
+  --pp-accent-soft: #FEF3C7;
+  --pp-surface: #F8FAFC;
+  --pp-surface-alt: #F1F5F9;
+  --pp-surface-card: #FFFFFF;
+  --pp-border: #E2E8F0;
+  --pp-text: #1E293B;
+  --pp-text-muted: #64748B;
+  --pp-text-inverse: #F8FAFC;
+
+  /* Type */
+  --pp-font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --pp-font-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+
+  /* Radii & shadow */
+  --pp-radius-sm: 8px;
+  --pp-radius-md: 12px;
+  --pp-radius-lg: 16px;
+  --pp-shadow-soft: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --pp-shadow-card: 0 4px 16px rgba(15, 23, 42, 0.06);
+
+  /* Spacing scale (for anything not covered by Tailwind utilities) */
+  --pp-space-xs: 6px;
+  --pp-space-sm: 12px;
+  --pp-space-md: 20px;
+  --pp-space-lg: 32px;
+}
 
 * {
   -webkit-font-smoothing: antialiased;
 }
 
 body {
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--pp-font-ui);
+  color: var(--pp-text);
+  letter-spacing: -0.01em;
 }
 
-.shadow-soft {
-  box-shadow: 0 12px 30px rgba(16, 42, 67, 0.08);
+h1, h2, h3, .pp-heading {
+  font-family: var(--pp-font-ui);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
+
+.pp-serif {
+  font-family: var(--pp-font-serif);
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+/* ---- Reusable components ---- */
+
+.pp-card {
+  background: var(--pp-surface-card);
+  border: 1px solid var(--pp-border);
+  border-radius: var(--pp-radius-md);
+  box-shadow: var(--pp-shadow-soft);
+}
+
+.pp-btn-primary {
+  background: var(--pp-navy);
+  color: var(--pp-text-inverse);
+  border-radius: var(--pp-radius-sm);
+  font-weight: 700;
+  transition: background .15s ease, transform .1s ease;
+}
+.pp-btn-primary:hover { background: var(--pp-navy-soft); }
+.pp-btn-primary:active { transform: translateY(1px); }
+
+.pp-btn-accent {
+  background: var(--pp-accent);
+  color: white;
+  border-radius: var(--pp-radius-sm);
+  font-weight: 700;
+}
+.pp-btn-accent:hover { filter: brightness(0.94); }
+
+.pp-input {
+  border: 1px solid var(--pp-border);
+  border-radius: var(--pp-radius-sm);
+  background: var(--pp-surface-card);
+  color: var(--pp-text);
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.pp-input:focus {
+  outline: none;
+  border-color: var(--pp-university-blue);
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.12);
+}
+
+.pp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: var(--pp-surface-alt);
+  color: var(--pp-navy-soft);
+  border: 1px solid var(--pp-border);
+}
+.pp-badge-accent { background: var(--pp-accent-soft); color: #92400E; border-color: #FDE68A; }
+
+.shadow-soft { box-shadow: var(--pp-shadow-soft); }
 
 .premium-glow {
-  background: linear-gradient(135deg, #102A43, #0F766E);
+  background: linear-gradient(135deg, var(--pp-navy), var(--pp-university-blue));
 }
 
-/* Toast notifications (used by projectpal.js) */
+/* ---- Toast notifications (used by projectpal.js) ---- */
 .pp-toast-fixed {
   position: fixed;
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
   padding: 12px 20px;
-  border-radius: 12px;
+  border-radius: var(--pp-radius-sm);
   color: white;
   font-weight: 600;
   font-size: 14px;
   z-index: 100;
-  box-shadow: 0 10px 25px rgba(0,0,0,.2);
+  box-shadow: var(--pp-shadow-card);
 }
 .pp-toast-enter { animation: ppToastIn .25s ease-out forwards; }
 .pp-toast-exit { animation: ppToastOut .25s ease-in forwards; }
 @keyframes ppToastIn { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
 @keyframes ppToastOut { from { opacity: 1; } to { opacity: 0; } }
 
-/* Page switcher nav (used by projectpal.js) */
+/* ---- Page switcher nav (used by projectpal.js) ---- */
 .pp-nav-fixed {
   position: fixed;
   bottom: 24px;
@@ -47,17 +152,18 @@ body {
   bottom: 48px;
   right: 0;
   width: 220px;
-  background: white;
-  border-radius: 14px;
-  box-shadow: 0 12px 30px rgba(16,42,67,.18);
+  background: var(--pp-surface-card);
+  border: 1px solid var(--pp-border);
+  border-radius: var(--pp-radius-md);
+  box-shadow: var(--pp-shadow-card);
   padding: 8px;
 }
 
-/* Page transition overlay (used by projectpal.js) */
+/* ---- Page transition overlay (used by projectpal.js) ---- */
 .pp-page-transition {
   position: fixed;
   inset: 0;
-  background: #102A43;
+  background: var(--pp-navy);
   opacity: 0;
   z-index: 200;
   pointer-events: none;
