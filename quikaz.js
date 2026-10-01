@@ -8,7 +8,7 @@ function paint(){$('#cr').textContent=S.credits;$('#cad').textContent=S.cad;$('#
  $$('#modes button').forEach(b=>b.classList.toggle('on',b.dataset.m===S.mode));$('#est').textContent=est()}
 // Cost: words in the prompt + answer depth + model + image
 function est(text){text=text===undefined?$('#q').value:text;const w=text.trim().split(/\s+/).filter(Boolean).length;
- if(!w)return 0;return Math.max(1,Math.ceil((Math.ceil(w/40)+(S.mode==='advanced'?6:2)+(S.img?3:0))*parseFloat($('#model').value)))}
+ if(!w)return 0;return Math.max(1,Math.ceil((Math.ceil(w/40)+(S.mode==='advanced'?6:2)+(S.img?3:0)+({quick:0,summary:1,calc:2,science:3,image:3,essay:4,case:4,report:5,research:6}[$('#kind').value]||0))*parseFloat($('#model').value)))}
 // Departmental duplicate check (demo store in this browser; move to Supabase for real cross-student checks)
 const words=t=>t.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/).filter(w=>w.length>2);
 const hash=w=>{let h=5381;for(const c of w)h=((h<<5)+h+c.charCodeAt(0))>>>0;return h};
@@ -20,8 +20,10 @@ function similar(t){const a=new Set(sig(t));if(a.size<3)return false;
 function remember(t){try{const l=seen();l.push(sig(t));localStorage.setItem(key(),JSON.stringify(l.slice(-200)))}catch(e){}}
 // AI call: uses your Netlify function if it exists, else a demo answer
 async function callAI(p){
- try{const r=await fetch('/.netlify/functions/quikaz',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
-  if(r.ok){const d=await r.json();if(d.answer)return d.answer}}catch(e){}
+ let tok='';try{const k=Object.keys(localStorage).find(x=>/^sb-.*-auth-token$/.test(x));tok=JSON.parse(localStorage.getItem(k)).access_token||''}catch(e){}
+ let r=null;try{r=await fetch('/.netlify/functions/quikaz',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+tok},body:JSON.stringify(p)})}catch(e){}
+ if(r&&r.ok){const d=await r.json();return d.answer}
+ if(r&&r.status!==404){const d=await r.json().catch(()=>({}));throw new Error(d.error||'The AI is unavailable. Try again.')}
  return `## ${{brainstorm:'Topic ideas',audit:'Review and audit'}[p.task]||'Answer'}\n\nDemo answer. Connect a backend to get real responses. Inline math works: the quadratic formula is $x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}$.\n\n$$E=mc^2$$\n\n| Item | Detail |\n|---|---|\n| Mode | ${p.mode} |\n| Model weight | ${p.model} |\n\n- Point one\n- Point two\n\n**Your input:** ${p.text.slice(0,200)}`}
 // Small markdown renderer (headings, bold, italic, lists, tables). Math is kept for KaTeX.
 const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
@@ -40,8 +42,9 @@ function append(t){const p=$('#paper');if(p.querySelector('.empty'))p.innerHTML=
 async function run(task,text,rep){const cost=est(text);
  if(S.credits<cost)return toast('Not enough credits. This needs '+cost+'.');
  $('#ask').disabled=true;
- try{const a=await callAI({task,text,mode:S.mode,model:$('#model').value,dept:S.dept,ocr:S.ocr});
+ try{const a=await callAI({task,text,mode:S.mode,model:$('#model').value,kind:$('#kind').value,dept:S.dept,ocr:S.ocr});
   S.credits-=cost;save();paint();rep?append(a):show(a);remember(text);toast('Done. '+cost+' credits used.')}
+ catch(e){toast(e.message||'Something went wrong.')}
  finally{$('#ask').disabled=false}}
 let pending='';
 function ask(force){const t=$('#q').value.trim();if(!t)return toast('Type a question first.');
@@ -50,12 +53,10 @@ $('#ask').onclick=()=>ask(false);
 $('#go').onclick=()=>{$('#dup').classList.remove('open');ask(true)};
 $('#remodel').onclick=()=>{$('#dup').classList.remove('open');const t=pending+'\n\nAnswer with a unique structure, wording and examples.';$('#q').value=t;run('answer',t)};
 $$('[data-t]').forEach(b=>b.onclick=()=>{const t=$('#q').value.trim();if(!t)return toast('Type a topic or paste an answer first.');run(b.dataset.t,t)});
-$('#expand').onclick=()=>{const s=String(getSelection());if(!s.trim())return toast('Select a paragraph in the answer first.');run('expand','Expand in more depth: '+s,true)};
+$('#expand').onclick=()=>{const p=$('#paper');if(p.querySelector('.empty'))return toast('Get an answer first.');run('expand','Expand this answer in much more depth, keeping the same structure:\n\n'+p.innerText,true)};
 $('#modes').onclick=e=>{if(e.target.dataset.m){S.mode=e.target.dataset.m;save();paint()}};
-$('#model').onchange=paint;$('#q').oninput=paint;
+$('#model').onchange=paint;$('#kind').onchange=paint;$('#q').oninput=paint;
 $('#dept').onchange=e=>{S.dept=e.target.value.trim();save()};
-$$('.fmt [data-f]').forEach(b=>b.onclick=()=>{const q=$('#q'),f=b.dataset.f.replace('\\n','\n'),a=q.selectionStart,e=q.selectionEnd,v=q.value,sel=v.slice(a,e);
- q.value=v.slice(0,a)+(f.trim()?(f.startsWith('\n')?f+sel:f+sel+f):'')+v.slice(e);q.focus();paint()});
 // Image + OCR (loads the OCR library only when needed)
 $('#img').onchange=async e=>{const f=e.target.files[0];if(!f)return;S.img=true;$('#imgname').textContent=f.name;paint();toast('Reading text from image…');
  try{if(!window.Tesseract)await new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.5/tesseract.min.js';s.onload=ok;s.onerror=no;document.head.appendChild(s)});

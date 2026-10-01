@@ -14,10 +14,7 @@
   <nav class="side" id="side" aria-label="Main">
     <div class="brand">QuikAz</div>
     <a href="dashboard.html">Dashboard</a>
-    <a href="workspace.html">Workspace</a>
     <a class="on" href="quikaz.html" aria-current="page">QuikAz</a>
-    <a href="goal-tracker.html">Goal tracker</a>
-    <a href="milestone-tracker.html">Milestones</a>
     <label class="dept">Your department<input id="dept" placeholder="e.g. Guidance and Counselling"></label>
   </nav>
   <div>
@@ -34,7 +31,7 @@
           <div class="seg" id="modes"><button class="on" data-m="basic">Basic answer</button><button data-m="advanced">Advanced answer</button></div>
           <select id="model" aria-label="Model"><option value="1">Fast model</option><option value="1.5" selected>Standard model</option><option value="2.5">Deep model</option></select>
         </div>
-        <div class="row fmt"><button data-f="**" title="Bold">B</button><button data-f="_" title="Italic">I</button><button data-f="\n- " title="List">List</button><button data-f="$" title="Math">Math</button>
+        <div class="row"><select id="kind" aria-label="Type of work"><option value="quick">Quick answer</option><option value="essay">Essay</option><option value="research">Research / literature review</option><option value="science">Science and lab work</option><option value="calc">Calculations and problem solving</option><option value="case">Case study</option><option value="report">Assignment / report</option><option value="summary">Summary of a text</option><option value="image">Image or diagram question</option></select>
           <label class="btn ghost" for="img" style="padding:4px 10px">Add image</label><input type="file" id="img" accept="image/*" hidden><span class="cost" id="imgname"></span></div>
         <textarea id="q" placeholder="Type your question. Use $x^2$ for math."></textarea>
         <div class="row"><span class="cost">Estimated cost: <b id="est">0</b> credits</span><button class="btn" id="ask" style="margin-left:auto">Get answer</button></div>
@@ -43,8 +40,8 @@
       </section>
       <section class="card">
         <h2>Answer workspace</h2>
-        <div class="row tools"><button class="btn ghost" id="expand">Expand selected text</button></div>
-        <div class="paper" id="paper" contenteditable="true"><p class="empty">Your answer appears here. Select any paragraph and choose Expand to go deeper.</p></div>
+        <div class="row tools"><button class="btn ghost" id="expand">Expand answer more</button></div>
+        <div class="paper" id="paper" contenteditable="true"><p class="empty">Your answer appears here. Use Expand answer more to go deeper.</p></div>
         <div class="row noprint"><span class="cost">Export</span><button class="btn ghost" id="pdf">PDF</button><button class="btn ghost" id="doc">Word</button></div>
       </section>
     </main>
