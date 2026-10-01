@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Final Project Lab — ProjectPal</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{ink:'#0F172A',ocean:'#1E3A8A',mist:'#F8FAFC',accent:'#D97706'},fontFamily:{sans:['Inter','system-ui','sans-serif']}}}}</script>
+<link rel="stylesheet" href="projectpal.css">
+</head>
+<body class="bg-mist font-sans text-slate-700 antialiased">
+<main class="mx-auto max-w-3xl px-4 py-8 sm:px-8">
+  <p class="text-sm font-bold text-ocean">Workspace</p>
+  <h1 class="mt-1 text-3xl font-extrabold text-ink">Final Project Lab</h1>
+  <p class="mt-2 text-slate-500">The last stop. Confirm everything is done, then export your project.</p>
+  <section class="mt-6 rounded-xl border border-slate-200 bg-white p-6">
+    <div class="flex items-center justify-between"><h2 class="text-lg font-bold text-ink">Readiness checklist</h2><span id="count" class="text-sm font-bold text-ocean">0 / 8</span></div>
+    <div class="mt-3 h-2 overflow-hidden rounded-full bg-slate-100"><div id="bar" class="h-full w-0 rounded-full bg-ocean transition-all"></div></div>
+    <div id="items" class="mt-5 space-y-3"></div>
+  </section>
+  <section class="mt-6 rounded-xl border border-slate-200 bg-white p-6">
+    <h2 class="text-lg font-bold text-ink">Export</h2>
+    <p id="hint" class="mt-1 text-sm text-slate-500">Tick every item above to unlock export.</p>
+    <div class="mt-4 flex flex-wrap gap-3">
+      <button id="pdf" disabled class="rounded-xl bg-ocean px-5 py-3 font-bold text-white disabled:opacity-40">Export as PDF</button>
+      <button id="doc" disabled class="rounded-xl border border-slate-200 px-5 py-3 font-bold text-ink disabled:opacity-40">Export as Word</button>
+    </div>
+  </section>
+</main>
+<script src="wsnav.js"></script>
+<script>
+var L = ['Scope defined and validated','Literature review complete','Methodology written','Chapter 1: Introduction done','Chapter 2: Literature Review done','Chapter 3: Methodology done','Chapters 4 and 5 done (results and conclusion)','References formatted and defense questions answered'];
+var KEY = 'pp_final_checks', S = [];
+try { S = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) {}
+function draw() {
+  document.getElementById('items').innerHTML = L.map(function (t, i) {
+    return '<label class="flex cursor-pointer items-center gap-3 rounded-xl bg-slate-50 p-4"><input type="checkbox" data-i="' + i + '" class="h-5 w-5 accent-blue-900"' + (S.indexOf(i) > -1 ? ' checked' : '') + '><span class="text-sm font-semibold text-ink">' + t + '</span></label>';
+  }).join('');
+  var n = S.length, all = n === L.length;
+  document.getElementById('count').textContent = n + ' / ' + L.length;
+  document.getElementById('bar').style.width = (n / L.length * 100) + '%';
+  document.getElementById('pdf').disabled = document.getElementById('doc').disabled = !all;
+  document.getElementById('hint').textContent = all ? 'All set. Choose a format.' : 'Tick every item above to unlock export.';
+}
+document.getElementById('items').addEventListener('change', function (e) {
+  var i = +e.target.dataset.i, k = S.indexOf(i);
+  if (k > -1) S.splice(k, 1); else S.push(i);
+  try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (x) {}
+  draw();
+});
+document.getElementById('pdf').onclick = function () { window.print(); };
+document.getElementById('doc').onclick = function () {
+  var h = '<html><head><meta charset="utf-8"></head><body><h1>Final Project</h1><p>Paste or build your chapters here.</p></body></html>';
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['\ufeff', h], { type: 'application/msword' }));
+  a.download = 'projectpal-final-project.doc'; a.click();
+};
+draw();
+</script>
+</body>
+</html>

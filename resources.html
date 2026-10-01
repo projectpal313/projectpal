@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resources — ProjectPal</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{ink:'#0F172A',ocean:'#1E3A8A',mist:'#F8FAFC',accent:'#D97706'},fontFamily:{sans:['Inter','system-ui','sans-serif']}}}}</script>
+<link rel="stylesheet" href="projectpal.css">
+</head>
+<body class="bg-mist font-sans text-slate-700 antialiased">
+<main class="mx-auto max-w-5xl px-4 py-8 sm:px-8">
+  <p class="text-sm font-bold text-ocean">Workspace</p>
+  <h1 class="mt-1 text-3xl font-extrabold text-ink">Resources</h1>
+  <p class="mt-2 text-slate-500">Materials, books and similar projects to help you build your own.</p>
+  <div class="mt-6 flex flex-wrap items-center gap-2" id="tabs"></div>
+  <input id="search" type="search" placeholder="Search resources" class="mt-4 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-ocean">
+  <div id="list" class="mt-5 grid gap-4 sm:grid-cols-2"></div>
+  <p id="empty" class="mt-6 hidden text-slate-500">Nothing matches your search.</p>
+</main>
+<script src="wsnav.js"></script>
+<script>
+// Edit this list to add real resources. type: Materials | Books | Similar projects
+var R = [
+  {type:'Materials', title:'Research proposal template', note:'A standard layout for scope, objectives and questions.'},
+  {type:'Materials', title:'Referencing guide (APA 7)', note:'How to cite books, journals and websites.'},
+  {type:'Materials', title:'Questionnaire design checklist', note:'Write clear, unbiased survey questions.'},
+  {type:'Books', title:'Research methods textbook (sample entry)', note:'Replace with the books your department recommends.'},
+  {type:'Books', title:'Academic writing handbook (sample entry)', note:'Replace with a real title and link.'},
+  {type:'Similar projects', title:'Sample project: Impact of digital learning on student performance', note:'See how a complete five-chapter project is structured.'},
+  {type:'Similar projects', title:'Sample project: SME growth in Lagos', note:'Mixed-methods example with a survey and interviews.'}
+];
+var types = ['All','Materials','Books','Similar projects'], cur = 'All';
+function draw() {
+  var q = document.getElementById('search').value.toLowerCase();
+  var rows = R.filter(function (r) { return (cur === 'All' || r.type === cur) && (r.title + r.note).toLowerCase().indexOf(q) > -1; });
+  document.getElementById('list').innerHTML = rows.map(function (r) {
+    return '<article class="rounded-xl border border-slate-200 bg-white p-5"><span class="rounded-full bg-teal-50 px-3 py-1 text-xs font-bold text-ocean">' + r.type + '</span><h3 class="mt-3 font-bold text-ink">' + r.title + '</h3><p class="mt-1 text-sm text-slate-500">' + r.note + '</p></article>';
+  }).join('');
+  document.getElementById('empty').classList.toggle('hidden', rows.length > 0);
+  document.getElementById('tabs').innerHTML = types.map(function (t) {
+    return '<button data-t="' + t + '" class="rounded-xl px-4 py-2 text-sm font-bold ' + (t === cur ? 'bg-ocean text-white' : 'border border-slate-200 bg-white text-ink') + '">' + t + '</button>';
+  }).join('');
+}
+document.getElementById('tabs').addEventListener('click', function (e) { if (e.target.dataset.t) { cur = e.target.dataset.t; draw(); } });
+document.getElementById('search').addEventListener('input', draw);
+draw();
+</script>
+</body>
+</html>
