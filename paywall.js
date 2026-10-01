@@ -4,7 +4,7 @@
   var CFG = {
     url: 'https://qhcponrxumfnomkgverb.supabase.co',
     anon: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFoY3BvbnJ4dW1mbm9ta2d2ZXJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyMDMyNzUsImV4cCI6MjEwNTc3OTI3NX0.PWiYx_f-yPLgdCQRz12cU4IazliOhb6W7klWTnGqT_U',
-    paystackKey: 'pk_live_REPLACE_WITH_YOUR_PAYSTACK_PUBLIC_KEY',
+    paystackKey: 'pk_test_a5281f0e364da4a6c92a54faaebf455db5412fb1',
     amount: 2500000, // in kobo = N25,000
     price: '\u20a625,000'
   };
