@@ -1,148 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Academic Workspace - ProjectPal</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{colors:{ink:'#102A43',ocean:'#0F766E'}}}}</script>
-  <link rel="stylesheet" href="projectpal.css">
-  <style>body{background:#F5F7FA;color:#334155}.stage-card{transition:all .3s ease}.stage-card.active{border-color:#0F766E;box-shadow:0 0 0 2px rgba(15,118,110,.15)}.stage-card.completed{border-color:#0D9488;background:#f0fdfa}.stage-card.locked{opacity:.5;pointer-events:none}.lit-card{transition:all .2s ease}.lit-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(15,118,110,.1)}.lit-card.selected{border-color:#0F766E;background:#f0fdfa}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}.fade-up{animation:fadeUp .4s ease-out}</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Academic Workspace - ProjectPal</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="projectpal.css">
+<style>
+:root{--bg:#F5F7FA;--panel:#fff;--raise:#F0FDFA;--line:#E2E8F0;--gold:#0F766E;--amber:#115E59;--text:#334155;--muted:#64748B;--bad:#DC2626;--ok:#0D9488;color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.ws *:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:1.75rem 1.25rem 4rem}
+.ws h1,.ws h2,.ws h3,.ws b{color:#102A43}.ws h1{font-size:1.7rem;font-weight:700}.sub{color:var(--muted);margin-top:.3rem}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:1rem}
+details.brief{margin-top:1.2rem}details.brief summary{cursor:pointer;padding:.9rem 1.2rem;font-weight:600}
+.bgrid{display:grid;gap:.8rem;padding:0 1.2rem 1.2rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.bgrid label{font-size:.8rem;font-weight:600;display:block}
+.in{width:100%;margin-top:.3rem;background:#fff;border:1px solid var(--line);border-radius:.6rem;color:var(--text);padding:.55rem .75rem;font:inherit}
+.in:focus{border-color:var(--gold);outline:none}
+.tabs{display:flex;gap:.4rem;overflow-x:auto;margin-top:1.2rem}
+.tab{background:none;border:1px solid var(--line);color:var(--muted);border-radius:.7rem;padding:.6rem 1rem;cursor:pointer;white-space:nowrap;font:inherit;font-size:.88rem}
+.tab.on{background:var(--gold);border-color:var(--gold);color:#fff;font-weight:700}
+.tab small{margin-left:.4rem;opacity:.75}
+.cols{display:grid;gap:1.2rem;margin-top:1.2rem;grid-template-columns:1fr 350px}
+@media(max-width:900px){.cols{grid-template-columns:1fr}}
+.pad{padding:1.3rem}
+.ed{font-size:1.05rem;line-height:1.8;min-height:20rem;resize:vertical}
+.tools{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.9rem;align-items:center}
+.b{background:var(--raise);border:1px solid var(--line);color:var(--text);border-radius:.6rem;padding:.5rem .9rem;cursor:pointer;font:inherit;font-size:.85rem}
+.b:hover:not(:disabled){border-color:var(--gold)}.b:disabled{opacity:.4}
+.b.go{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:700}
+#out{margin-top:1rem;padding:1rem 1.2rem;border-left:3px solid var(--gold);background:var(--bg);line-height:1.7;white-space:pre-wrap}
+.gt{display:flex;flex-wrap:wrap;gap:.3rem;padding:.8rem .8rem 0}
+.gt button{background:none;border:0;color:var(--muted);padding:.35rem .6rem;border-radius:.5rem;cursor:pointer;font:inherit;font-size:.82rem}
+.gt button.on{background:var(--raise);color:var(--gold);font-weight:600}
+#gbody{padding:1rem 1.2rem 1.3rem;font-size:.92rem;line-height:1.65}
+#gbody li{margin:.5rem 0 0 1.1rem;list-style:disc}
+.part{border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:.5rem;padding:.55rem .8rem;margin-top:.5rem;background:var(--bg)}
+.hidden{display:none!important}
+</style>
 </head>
-<body class="min-h-screen">
-  <header class="bg-white border-b border-slate-200">
-    <div class="mx-auto flex max-w-[90rem] items-center justify-between px-5 py-4 sm:px-8">
-      <a href="welcome-hub.html" class="flex items-center gap-2 text-lg font-extrabold text-ink"><span class="grid h-10 w-10 place-items-center rounded-xl bg-ocean text-white">P</span>ProjectPal</a>
-      <a href="dashboard.html" class="rounded-xl border border-slate-200 px-4 py-2 text-sm font-bold text-ink hover:bg-slate-50">&larr; Back to Dashboard</a>
-    </div>
-  </header>
-  <div class="mx-auto max-w-[90rem] px-5 py-8 sm:px-8">
-    <div class="flex justify-center mb-8"><div class="flex space-x-8">
-      <div class="flex items-center space-x-3"><div class="w-8 h-8 rounded-full bg-ocean text-white flex items-center justify-center text-xs font-medium">1</div><span class="hidden sm:block text-sm font-medium text-slate-600">Scope</span></div>
-      <div class="flex-1"><div class="h-1 bg-slate-200 rounded-full"></div></div>
-      <div class="flex items-center space-x-3"><div class="w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-medium">2</div><span class="hidden sm:block text-sm font-medium text-slate-600">Literature</span></div>
-      <div class="flex-1"><div class="h-1 bg-slate-200 rounded-full"></div></div>
-      <div class="flex items-center space-x-3"><div class="w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-medium">3</div><span class="hidden sm:block text-sm font-medium text-slate-600">Methodology</span></div>
-      <div class="flex-1"><div class="h-1 bg-slate-200 rounded-full"></div></div>
-      <div class="flex items-center space-x-3"><div class="w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-medium">4</div><span class="hidden sm:block text-sm font-medium text-slate-600">Drafting</span></div>
-      <div class="flex-1"><div class="h-1 bg-slate-200 rounded-full"></div></div>
-      <div class="flex items-center space-x-3"><div class="w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-medium">5</div><span class="hidden sm:block text-sm font-medium text-slate-600">Defense</span></div>
-    </div></div>
-    <div class="bg-white rounded-2xl shadow-xl p-6 space-y-6">
-      <!-- Stage 1: Scope Definition -->
-      <section id="stage-1" class="stage-card active space-y-4 fade-up">
-        <h2 class="text-xl font-bold text-ink flex items-center gap-2"><span class="bg-ocean/10 text-ocean rounded-full w-8 h-8 flex items-center justify-center">1</span>Scope Definition & Diagnostic Gate</h2>
-        <p class="text-slate-600">Define your research scope with three key elements.</p>
-        <div class="space-y-4">
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">1. Geographic Scope/Region</label><input type="text" id="geoScope" placeholder="e.g., Lagos, Nigeria" class="w-full rounded-xl border border-slate-300 px-4 py-2"></div>
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">2. Target Sample / Case Study Unit</label><input type="text" id="targetSample" placeholder="e.g., SMEs with under 50 employees" class="w-full rounded-xl border border-slate-300 px-4 py-2"></div>
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">3. Core Problem / Primary Objective Statement</label><textarea id="coreProblem" rows="3" placeholder="What specific problem does your research address?" class="w-full rounded-xl border border-slate-300 px-4 py-2"></textarea></div>
-        </div>
-        <button id="validateScopeBtn" class="w-full rounded-xl bg-ocean px-5 py-3 font-bold text-white hover:bg-teal-800" disabled>Validate Scope & Proceed</button>
-        <div id="stage1-error" class="mt-3 text-sm text-red-500 hidden"></div>
-      </section>
+<body class="ws">
+<div class="wrap">
+  <h1>Academic workspace</h1>
+  <p class="sub" id="topic">Pick a chapter, learn what it needs, then write it with AI help.</p>
 
-      <!-- Stage 2: Micro-Literature Review -->
-      <section id="stage-2" class="stage-card locked space-y-4 fade-up hidden">
-        <h2 class="text-xl font-bold text-ink flex items-center gap-2"><span class="bg-ocean/10 text-ocean rounded-full w-8 h-8 flex items-center justify-center">2</span>Micro-Literature Review</h2>
-        <p class="text-slate-600">Select at least 2 cards to cite before proceeding.</p>
-        <div class="grid gap-4 md:grid-cols-1 lg:grid-cols-3">
-          <div class="lit-card rounded-xl border border-slate-300 p-4" data-card="1">
-            <h3 class="font-semibold text-ocean mb-2">Urban Informal Economy</h3>
-            <p class="text-sm text-slate-600"><strong>Finding:</strong> Informal sector contributes 65% of Lagos employment but remains undocumented.</p>
-            <p class="text-sm text-slate-600"><strong>Method:</strong> Mixed-methods: 300 surveys + 25 interviews.</p>
-            <p class="text-sm text-slate-600"><strong>Gap:</strong> Limited longitudinal data on survival.</p>
-          </div>
-          <div class="lit-card rounded-xl border border-slate-300 p-4" data-card="2">
-            <h3 class="font-semibold text-ocean mb-2">SME Digital Adoption</h3>
-            <p class="text-sm text-slate-600"><strong>Finding:</strong> 78% of Nigerian SMEs cite high internet costs as barrier.</p>
-            <p class="text-sm text-slate-600"><strong>Method:</strong> 450 SME survey via questionnaires.</p>
-            <p class="text-sm text-slate-600"><strong>Gap:</strong> Lack of gender comparison studies.</p>
-          </div>
-          <div class="lit-card rounded-xl border border-slate-300 p-4" data-card="3">
-            <h3 class="font-semibold text-ocean mb-2">Youth Entrepreneurship</h3>
-            <p class="text-sm text-slate-600"><strong>Finding:</strong> Youth show 40% higher innovation, 30% higher failure.</p>
-            <p class="text-sm text-slate-600"><strong>Method:</strong> 15 case studies over 12 months.</p>
-            <p class="text-sm text-slate-600"><strong>Gap:</strong> Minimal mentorship research.</p>
-          </div>
-        </div>
-        <div class="flex items-center justify-between mt-4"><span id="litSelectionCount" class="text-sm">0/2 selected</span><button id="proceedToMethodologyBtn" class="rounded-xl bg-ocean/20 px-5 py-2 font-semibold text-ocean hover:bg-ocean/30" disabled>Proceed to Methodology</button></div>
-        <div id="stage2-error" class="mt-2 text-sm text-red-500 hidden"></div>
-      </section>
+  <details class="box brief" id="briefBox" open>
+    <summary>Project brief (the AI uses this for every chapter)</summary>
+    <div class="bgrid" id="bgrid"></div>
+  </details>
 
-      <!-- Stage 3: Guided Data & Methodology Input -->
-      <section id="stage-3" class="stage-card locked space-y-4 fade-up hidden">
-        <h2 class="text-xl font-bold text-ink flex items-center gap-2"><span class="bg-ocean/10 text-ocean rounded-full w-8 h-8 flex items-center justify-center">3</span>Guided Data & Methodology Input</h2>
-        <p class="text-slate-600">Define your research approach with guided inputs.</p>
-        <div class="space-y-4">
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">Research Design Selection</label><select id="researchDesign" class="w-full rounded-xl border border-slate-300 px-4 py-2"><option value="">Select Research Design</option><option value="qualitative">Qualitative</option><option value="quantitative">Quantitative</option><option value="mixed">Mixed Methods</option></select></div>
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">Sample Size & Data Collection Instrument</label><input type="text" id="sampleSize" placeholder="e.g., 100 Survey Respondents via Questionnaires" class="w-full rounded-xl border border-slate-300 px-4 py-2"></div>
-        </div>
-        <div class="bg-ocean/5 rounded-xl p-4"><h3 class="font-semibold text-ocean mb-2">Methodology Preview</h3><p id="methodologyText" class="text-sm text-slate-700">Complete the fields above to see your methodology summary.</p></div>
-        <button id="proceedToDraftingBtn" class="w-full rounded-xl bg-ocean px-5 py-3 font-bold text-white hover:bg-teal-800" disabled>Proceed to Chapter Drafting</button>
-        <div id="stage3-error" class="mt-3 text-sm text-red-500 hidden"></div>
-      </section>
+  <nav class="tabs" id="tabs" aria-label="Chapters"></nav>
 
-      <!-- Stage 4: Outlined Drafting & Guided Content -->
-      <section id="stage-4" class="stage-card locked space-y-4 fade-up hidden">
-        <h2 class="text-xl font-bold text-ink flex items-center gap-2"><span class="bg-ocean/10 text-ocean rounded-full w-8 h-8 flex items-center justify-center">4</span>Outlined Drafting & Guided Content</h2>
-        <p class="text-slate-600">Develop chapters with interactive scaffolding blocks.</p>
-        <div class="space-y-3" id="chapterAccordion">
-          <div class="border rounded-lg overflow-hidden">
-            <div class="bg-ocean/5 px-4 py-3 cursor-pointer flex justify-between items-center" onclick="toggleChapter(1)">
-              <span class="font-semibold text-ocean">Chapter 1: Introduction</span><span id="ch1-icon" class="text-ocean transition-transform">&#9656;</span>
-            </div>
-            <div id="ch1-content" class="hidden p-4 text-sm text-slate-600">Problem Statement, Significance, Research Questions</div>
-          </div>
-          <div class="border rounded-lg overflow-hidden">
-            <div class="bg-ocean/5 px-4 py-3 cursor-pointer flex justify-between items-center" onclick="toggleChapter(2)">
-              <span class="font-semibold text-ocean">Chapter 2: Literature Review</span><span id="ch2-icon" class="text-ocean transition-transform">&#9656;</span>
-            </div>
-            <div id="ch2-content" class="hidden p-4 text-sm text-slate-600">Research Gap, Theoretical Framework, Empirical Review</div>
-          </div>
-          <div class="border rounded-lg overflow-hidden">
-            <div class="bg-ocean/5 px-4 py-3 cursor-pointer flex justify-between items-center" onclick="toggleChapter(3)">
-              <span class="font-semibold text-ocean">Chapter 3: Methodology</span><span id="ch3-icon" class="text-ocean transition-transform">&#9656;</span>
-            </div>
-            <div id="ch3-content" class="hidden p-4 text-sm text-slate-600">Research Design, Sample & Sampling, Data Collection</div>
-          </div>
-          <div class="border rounded-lg overflow-hidden">
-            <div class="bg-ocean/5 px-4 py-3 cursor-pointer flex justify-between items-center" onclick="toggleChapter(4)">
-              <span class="font-semibold text-ocean">Chapter 4: Results & Discussion</span><span id="ch4-icon" class="text-ocean transition-transform">&#9656;</span>
-            </div>
-            <div id="ch4-content" class="hidden p-4 text-sm text-slate-600">Findings, Pattern Recognition, Literature Comparison</div>
-          </div>
-          <div class="border rounded-lg overflow-hidden">
-            <div class="bg-ocean/5 px-4 py-3 cursor-pointer flex justify-between items-center" onclick="toggleChapter(5)">
-              <span class="font-semibold text-ocean">Chapter 5: Conclusion & Recommendations</span><span id="ch5-icon" class="text-ocean transition-transform">&#9656;</span>
-            </div>
-            <div id="ch5-content" class="hidden p-4 text-sm text-slate-600">Summary, Conclusion, Limitations, Recommendations</div>
-          </div>
-        </div>
-        <button id="proceedToDefenseBtn" class="w-full rounded-xl bg-ocean px-5 py-3 font-bold text-white hover:bg-teal-800" disabled>Proceed to Defense Preparation</button>
-        <div id="stage4-error" class="mt-3 text-sm text-red-500 hidden"></div>
-      </section>
+  <div class="cols">
+    <section class="box pad">
+      <h2 id="ct" style="font-size:1.2rem;font-weight:600"></h2>
+      <textarea class="in ed" id="ed" placeholder="Write this chapter here, or ask the AI to help you start."></textarea>
+      <div class="tools">
+        <button class="b go" data-t="draft">Help me start</button>
+        <button class="b" data-t="review">Review my draft</button>
+        <button class="b" data-t="summarize">Summarize</button>
+        <button class="b" data-t="readthrough">Read-through</button>
+        <button class="b" data-t="explain">Explain simply</button>
+        <span class="sub" id="wc" style="margin:0 0 0 auto"></span>
+      </div>
+      <div id="out" class="hidden" role="status"></div>
+    </section>
 
-      <!-- Stage 5: Defense Preparation Checkpoint -->
-      <section id="stage-5" class="stage-card locked space-y-4 fade-up hidden">
-        <h2 class="text-xl font-bold text-ink flex items-center gap-2"><span class="bg-ocean/10 text-ocean rounded-full w-8 h-8 flex items-center justify-center">5</span>Defense Preparation Checkpoint</h2>
-        <p class="text-slate-600">Verify readiness by answering three questions before export.</p>
-        <div class="space-y-4">
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">1. Core Problem Statement</label><textarea id="defenseQ1" rows="2" placeholder="In 1-2 sentences..." class="w-full rounded-xl border border-slate-300 px-4 py-2"></textarea></div>
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">2. Sampling Rationale</label><textarea id="defenseQ2" rows="2" placeholder="Explain sampling rationale..." class="w-full rounded-xl border border-slate-300 px-4 py-2"></textarea></div>
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">3. Primary Research Finding</label><textarea id="defenseQ3" rows="2" placeholder="State main discovery..." class="w-full rounded-xl border border-slate-300 px-4 py-2"></textarea></div>
-        </div>
-        <button id="submitDefenseBtn" class="w-full rounded-xl bg-ocean px-5 py-3 font-bold text-white hover:bg-teal-800">Submit Defense Preparation</button>
-        <div id="defenseResult" class="mt-4 text-center hidden">
-          <div id="defenseBadge" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"></div>
-          <p id="defenseMessage" class="mt-2 text-sm"></p>
-        </div>
-        <button id="exportProjectBtn" class="w-full rounded-xl bg-teal-600 px-6 py-3 font-bold text-white hover:bg-teal-700" disabled>Export Project (PDF/Word)</button>
-      </section>
-    </div>
+    <aside class="box" aria-label="Chapter guide">
+      <div class="gt" id="gt"></div>
+      <div id="gbody"></div>
+    </aside>
   </div>
+</div>
 
-  <script src="projectpal.js"></script>
-  <script src="workspace.js"></script>
+<script src="projectpal.js"></script>
+<script src="wsnav.js"></script>
+<script>
+(function () {
+  var KEY = 'pp_ws2';
+  var BRIEF = [['topic', 'Project topic'], ['region', 'Region'], ['sample', 'Who or what you study'], ['problem', 'Core problem'], ['design', 'Research design (qualitative, quantitative, mixed)'], ['size', 'Sample size and instrument']];
+  var CH = [
+    { t: 'Chapter 1: Introduction', goal: 'Convince the reader the problem is real, worth solving, and clearly bounded.', ana: 'Like a film trailer: it shows what the story is about and why it matters, without giving away the ending.', ex: 'A study on digital learning opens with falling exam scores after schools moved online, then states the exact question it will answer.', facts: ['Panels often read the introduction first and judge the whole project by it.', 'A good problem statement is one or two sentences, not a paragraph.'], parts: ['Background', 'Problem statement', 'Objectives', 'Research questions', 'Significance', 'Scope'] },
+    { t: 'Chapter 2: Literature review', goal: 'Show what is already known, and the gap your study fills.', ana: 'Like surveying a town before building a house: you check what exists so you do not build on someone else\'s plot.', ex: 'Three studies show internet cost blocks SME adoption, but none compare men and women. That missing comparison is your gap.', facts: ['Group sources by theme, not one author after another.', 'Use mostly recent sources (last 5 to 10 years) plus key older works.'], parts: ['Theoretical framework', 'Conceptual review', 'Empirical review', 'Research gap'] },
+    { t: 'Chapter 3: Methodology', goal: 'Explain how you collected and analysed data so someone else could repeat it.', ana: 'Like a recipe: another cook should follow your steps and get the same dish.', ex: '100 SME owners in Lagos chosen by stratified sampling, a 5-point questionnaire, analysed with descriptive statistics.', facts: ['Your design must match your research questions.', 'State how you protect respondents\' confidentiality.'], parts: ['Research design', 'Population', 'Sample and sampling', 'Instrument', 'Data analysis', 'Ethics'] },
+    { t: 'Chapter 4: Results and discussion', goal: 'Present what you found, then explain what it means.', ana: 'Like a doctor reading test results: first the numbers, then what they mean for the patient.', ex: 'A table shows 62% of respondents use e-learning weekly; the discussion links this to earlier findings on internet cost.', facts: ['Report findings before interpreting them.', 'Every table or chart needs a number, a title and a sentence explaining it.'], parts: ['Data presentation', 'Findings per question', 'Discussion', 'Comparison with literature'] },
+    { t: 'Chapter 5: Conclusion and recommendations', goal: 'Answer your questions, admit limits, and say what should happen next.', ana: 'Like the last scene of a film: it resolves the story and leaves the audience knowing what to do.', ex: 'The study concludes cost is the main barrier and recommends subsidised data bundles for student projects.', facts: ['Add no new data or sources here.', 'Recommendations must follow directly from your findings.'], parts: ['Summary', 'Conclusion', 'Limitations', 'Recommendations', 'Further research'] }
+  ];
+  var GT = [['goal', 'Goal'], ['ana', 'Analogy'], ['ex', 'Real example'], ['facts', 'Facts'], ['parts', 'Structure'], ['res', 'Research']];
+  var S = { b: {}, ch: ['', '', '', '', ''], v: 0 }, g = 'goal';
+  try { var r = JSON.parse(localStorage.getItem(KEY)); if (r && r.ch) S = r; } catch (e) {}
+  var $ = function (i) { return document.getElementById(i); };
+  var words = function (t) { return (t || '').trim().split(/\s+/).filter(Boolean).length; };
+  var save = function () { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+  var esc = function (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
+
+  var pr = ProjectPal.getProfile();
+  if (!S.b.topic && pr.topic) S.b.topic = pr.topic;
+  $('bgrid').innerHTML = BRIEF.map(function (f) { return '<div><label for="b_' + f[0] + '">' + f[1] + '</label><input class="in" id="b_' + f[0] + '"></div>'; }).join('');
+  BRIEF.forEach(function (f) {
+    var el = $('b_' + f[0]); el.value = S.b[f[0]] || '';
+    el.addEventListener('input', function () { S.b[f[0]] = el.value; save(); head(); });
+  });
+  function head() { $('topic').textContent = S.b.topic ? 'Project: ' + S.b.topic : 'Pick a chapter, learn what it needs, then write it with AI help.'; }
+
+  function tabs() {
+    $('tabs').innerHTML = CH.map(function (c, i) { return '<button class="tab' + (i === S.v ? ' on' : '') + '" data-i="' + i + '">' + c.t.split(':')[0] + '<small>' + words(S.ch[i]) + 'w</small></button>'; }).join('');
+    $('ct').textContent = CH[S.v].t; $('ed').value = S.ch[S.v] || ''; wc(); guide(); $('out').classList.add('hidden');
+  }
+  function wc() { $('wc').textContent = words($('ed').value) + ' words'; }
+  $('tabs').addEventListener('click', function (e) { var b = e.target.closest('.tab'); if (!b) return; S.v = +b.dataset.i; save(); tabs(); });
+  $('ed').addEventListener('input', function () { S.ch[S.v] = $('ed').value; save(); wc(); var s = document.querySelector('.tab.on small'); if (s) s.textContent = words($('ed').value) + 'w'; });
+
+  function guide() {
+    $('gt').innerHTML = GT.map(function (x) { return '<button data-g="' + x[0] + '" class="' + (g === x[0] ? 'on' : '') + '">' + x[1] + '</button>'; }).join('');
+    var c = CH[S.v], h;
+    if (g === 'facts') h = '<ul>' + c.facts.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ul>';
+    else if (g === 'parts') h = '<p class="sub" style="margin-bottom:.3rem">Sections this chapter usually contains, in order:</p>' + c.parts.map(function (p) { return '<div class="part">' + esc(p) + '</div>'; }).join('');
+    else if (g === 'res') h = '<p>Find studies and facts connected to your topic.</p><button class="b go" style="margin-top:.7rem" data-t="research">Find research for this chapter</button><div id="resOut" style="margin-top:.8rem;white-space:pre-wrap"></div>';
+    else h = '<p>' + esc(c[g]) + '</p>';
+    $('gbody').innerHTML = h;
+  }
+  $('gt').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) { g = b.dataset.g; guide(); } });
+
+  function brief() { return BRIEF.filter(function (f) { return S.b[f[0]]; }).map(function (f) { return f[1] + ': ' + S.b[f[0]]; }).join('\n'); }
+  function show(t, target) { var o = target || $('out'); o.textContent = t; o.classList.remove('hidden'); }
+  async function ai(task, target) {
+    var text = $('ed').value, btns = document.querySelectorAll('[data-t]');
+    if (task === 'summarize' && words(text) < 20) return show('Write at least 20 words first, then summarize.', target);
+    btns.forEach(function (b) { b.disabled = true; }); show('Working...', target);
+    try {
+      // Netlify function holds the Gemini key and checks credits (not built yet)
+      var r = await fetch('/.netlify/functions/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'project', task: task, chapter: CH[S.v].t, brief: brief(), text: text }) });
+      if (!r.ok) throw 0; var j = await r.json(); if (!j.text) throw 0;
+      show(j.text, target);
+    } catch (e) {
+      if (task === 'summarize') { // local fallback: first sentence of each paragraph
+        var s = text.split(/\n+/).map(function (p) { return (p.match(/[^.!?]+[.!?]?/) || [''])[0].trim(); }).filter(Boolean).join(' ');
+        show('Quick summary (AI not connected yet):\n' + s, target);
+      } else show('AI is not connected yet. Your guide on the right still works, and you can keep writing.', target);
+    }
+    btns.forEach(function (b) { b.disabled = false; });
+  }
+  document.addEventListener('click', function (e) {
+    var t = e.target.dataset && e.target.dataset.t; if (!t) return;
+    ai(t, t === 'research' ? $('resOut') : null);
+  });
+
+  head(); tabs();
+})();
+</script>
 </body>
 </html>
