@@ -38,6 +38,7 @@ details.brief{margin-top:1.2rem}details.brief summary{cursor:pointer;padding:.9r
 .part{border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:.5rem;padding:.55rem .8rem;margin-top:.5rem;background:var(--bg)}
 .hidden{display:none!important}
 </style>
+<script src="paywall.js"></script>
 </head>
 <body class="ws">
 <div class="wrap">
@@ -45,7 +46,7 @@ details.brief{margin-top:1.2rem}details.brief summary{cursor:pointer;padding:.9r
   <p class="sub" id="topic">Pick a chapter, learn what it needs, then write it with AI help.</p>
 
   <details class="box brief" id="briefBox" open>
-    <summary>Project brief (the AI uses this for every chapter)</summary>
+    <summary>About your project (the AI uses this to help you)</summary>
     <div class="bgrid" id="bgrid"></div>
   </details>
 
@@ -57,9 +58,9 @@ details.brief{margin-top:1.2rem}details.brief summary{cursor:pointer;padding:.9r
       <textarea class="in ed" id="ed" placeholder="Write this chapter here, or ask the AI to help you start."></textarea>
       <div class="tools">
         <button class="b go" data-t="draft">Help me start</button>
-        <button class="b" data-t="review">Review my draft</button>
-        <button class="b" data-t="summarize">Summarize</button>
-        <button class="b" data-t="readthrough">Read-through</button>
+        <button class="b" data-t="review">Check my writing</button>
+        <button class="b" data-t="summarize">Short summary</button>
+        <button class="b" data-t="readthrough">Read it back to me</button>
         <button class="b" data-t="explain">Explain simply</button>
         <span class="sub" id="wc" style="margin:0 0 0 auto"></span>
       </div>
@@ -78,15 +79,15 @@ details.brief{margin-top:1.2rem}details.brief summary{cursor:pointer;padding:.9r
 <script>
 (function () {
   var KEY = 'pp_ws2';
-  var BRIEF = [['topic', 'Project topic'], ['region', 'Region'], ['sample', 'Who or what you study'], ['problem', 'Core problem'], ['design', 'Research design (qualitative, quantitative, mixed)'], ['size', 'Sample size and instrument']];
+  var BRIEF = [['topic', 'Project topic'], ['region', 'Place (city or country)'], ['sample', 'Who or what you study'], ['problem', 'The main problem you are solving'], ['design', 'Type of research (interviews and words, numbers and surveys, or both)'], ['size', 'How many people, and how you will ask them (e.g. 100 people, questionnaire)']];
   var CH = [
-    { t: 'Chapter 1: Introduction', goal: 'Convince the reader the problem is real, worth solving, and clearly bounded.', ana: 'Like a film trailer: it shows what the story is about and why it matters, without giving away the ending.', ex: 'A study on digital learning opens with falling exam scores after schools moved online, then states the exact question it will answer.', facts: ['Panels often read the introduction first and judge the whole project by it.', 'A good problem statement is one or two sentences, not a paragraph.'], parts: ['Background', 'Problem statement', 'Objectives', 'Research questions', 'Significance', 'Scope'] },
-    { t: 'Chapter 2: Literature review', goal: 'Show what is already known, and the gap your study fills.', ana: 'Like surveying a town before building a house: you check what exists so you do not build on someone else\'s plot.', ex: 'Three studies show internet cost blocks SME adoption, but none compare men and women. That missing comparison is your gap.', facts: ['Group sources by theme, not one author after another.', 'Use mostly recent sources (last 5 to 10 years) plus key older works.'], parts: ['Theoretical framework', 'Conceptual review', 'Empirical review', 'Research gap'] },
-    { t: 'Chapter 3: Methodology', goal: 'Explain how you collected and analysed data so someone else could repeat it.', ana: 'Like a recipe: another cook should follow your steps and get the same dish.', ex: '100 SME owners in Lagos chosen by stratified sampling, a 5-point questionnaire, analysed with descriptive statistics.', facts: ['Your design must match your research questions.', 'State how you protect respondents\' confidentiality.'], parts: ['Research design', 'Population', 'Sample and sampling', 'Instrument', 'Data analysis', 'Ethics'] },
-    { t: 'Chapter 4: Results and discussion', goal: 'Present what you found, then explain what it means.', ana: 'Like a doctor reading test results: first the numbers, then what they mean for the patient.', ex: 'A table shows 62% of respondents use e-learning weekly; the discussion links this to earlier findings on internet cost.', facts: ['Report findings before interpreting them.', 'Every table or chart needs a number, a title and a sentence explaining it.'], parts: ['Data presentation', 'Findings per question', 'Discussion', 'Comparison with literature'] },
-    { t: 'Chapter 5: Conclusion and recommendations', goal: 'Answer your questions, admit limits, and say what should happen next.', ana: 'Like the last scene of a film: it resolves the story and leaves the audience knowing what to do.', ex: 'The study concludes cost is the main barrier and recommends subsidised data bundles for student projects.', facts: ['Add no new data or sources here.', 'Recommendations must follow directly from your findings.'], parts: ['Summary', 'Conclusion', 'Limitations', 'Recommendations', 'Further research'] }
+    { t: 'Chapter 1: Introduction', goal: 'Convince the reader the problem is real, worth solving, and clearly bounded.', ana: 'Like a film trailer: it shows what the story is about and why it matters, without giving away the ending.', ex: 'A study on digital learning opens with falling exam scores after schools moved online, then states the exact question it will answer.', facts: ['Panels often read the introduction first and judge the whole project by it.', 'Describe the problem in one or two sentences, not a long paragraph.'], parts: ['Background', 'The problem', 'What you want to achieve', 'Questions you will answer', 'Why it matters', 'What your study covers'] },
+    { t: 'Chapter 2: What others have written (Literature review)', goal: 'Show what is already known, and the gap your study fills.', ana: 'Like surveying a town before building a house: you check what exists so you do not build on someone else\'s plot.', ex: 'Three studies show internet cost blocks SME adoption, but none compare men and women. That missing comparison is your gap.', facts: ['Group sources by theme, not one author after another.', 'Use mostly recent sources (last 5 to 10 years) plus key older works.'], parts: ['Main theory behind your study', 'Meaning of key words', 'Past studies on your topic', 'What past studies missed (research gap)'] },
+    { t: 'Chapter 3: How you did the research (Methodology)', goal: 'Explain how you collected and studied your answers so someone else could repeat it.', ana: 'Like a recipe: another cook should follow your steps and get the same dish.', ex: '100 shop owners in Lagos picked fairly from different areas, a 5-point questionnaire, and simple counts and percentages.', facts: ['Your type of research must match your questions.', 'Say how you keep people's answers private.'], parts: ['Type of research', 'Everyone you want to study', 'The smaller group you pick', 'Tool for collecting answers (e.g. questionnaire)', 'How you study the answers', 'Privacy and consent'] },
+    { t: 'Chapter 4: Your results and what they mean', goal: 'Present what you found, then explain what it means.', ana: 'Like a doctor reading test results: first the numbers, then what they mean for the patient.', ex: 'A table shows 62% of respondents use e-learning weekly; the discussion links this to earlier findings on internet cost.', facts: ['Show what you found before explaining it.', 'Every table or chart needs a number, a title and a sentence explaining it.'], parts: ['Showing your data', 'Answers to each question', 'What the results mean', 'How results compare with past studies'] },
+    { t: 'Chapter 5: Conclusion and suggestions', goal: 'Answer your questions, admit limits, and say what should happen next.', ana: 'Like the last scene of a film: it resolves the story and leaves the audience knowing what to do.', ex: 'The study concludes cost is the main barrier and recommends subsidised data bundles for student projects.', facts: ['Add no new data or sources here.', 'Suggestions must come straight from what you found.'], parts: ['Summary', 'Conclusion', 'What limited your study', 'Suggestions', 'What others can study next'] }
   ];
-  var GT = [['goal', 'Goal'], ['ana', 'Analogy'], ['ex', 'Real example'], ['facts', 'Facts'], ['parts', 'Structure'], ['res', 'Research']];
+  var GT = [['goal', 'Goal'], ['ana', 'Analogy'], ['ex', 'Real example'], ['facts', 'Facts'], ['parts', 'What goes inside'], ['res', 'Find studies']];
   var S = { b: {}, ch: ['', '', '', '', ''], v: 0 }, g = 'goal';
   try { var r = JSON.parse(localStorage.getItem(KEY)); if (r && r.ch) S = r; } catch (e) {}
   var $ = function (i) { return document.getElementById(i); };
@@ -116,7 +117,7 @@ details.brief{margin-top:1.2rem}details.brief summary{cursor:pointer;padding:.9r
     var c = CH[S.v], h;
     if (g === 'facts') h = '<ul>' + c.facts.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ul>';
     else if (g === 'parts') h = '<p class="sub" style="margin-bottom:.3rem">Sections this chapter usually contains, in order:</p>' + c.parts.map(function (p) { return '<div class="part">' + esc(p) + '</div>'; }).join('');
-    else if (g === 'res') h = '<p>Find studies and facts connected to your topic.</p><button class="b go" style="margin-top:.7rem" data-t="research">Find research for this chapter</button><div id="resOut" style="margin-top:.8rem;white-space:pre-wrap"></div>';
+    else if (g === 'res') h = '<p>Find studies and facts linked to your topic.</p><button class="b go" style="margin-top:.7rem" data-t="research">Find studies for this chapter</button><div id="resOut" style="margin-top:.8rem;white-space:pre-wrap"></div>';
     else h = '<p>' + esc(c[g]) + '</p>';
     $('gbody').innerHTML = h;
   }
@@ -126,7 +127,7 @@ details.brief{margin-top:1.2rem}details.brief summary{cursor:pointer;padding:.9r
   function show(t, target) { var o = target || $('out'); o.textContent = t; o.classList.remove('hidden'); }
   async function ai(task, target) {
     var text = $('ed').value, btns = document.querySelectorAll('[data-t]');
-    if (task === 'summarize' && words(text) < 20) return show('Write at least 20 words first, then summarize.', target);
+    if (task === 'summarize' && words(text) < 20) return show('Write at least 20 words first, then ask for a short summary.', target);
     btns.forEach(function (b) { b.disabled = true; }); show('Working...', target);
     try {
       // Netlify function holds the Gemini key and checks credits (not built yet)

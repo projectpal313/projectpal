@@ -27,6 +27,7 @@
 .card h3{font-weight:600;margin-top:.4rem}.card p{color:var(--muted);font-size:.88rem;margin-top:.3rem}
 
 </style>
+<script src="paywall.js"></script>
 </head>
 <body class="ws">
 <div class="wrap">
@@ -52,13 +53,13 @@
 <script>
 (function () {
   var R = [
-    { type: 'Materials', title: 'Research proposal template', note: 'A standard layout for scope, objectives and questions.' },
-    { type: 'Materials', title: 'Referencing guide (APA 7)', note: 'How to cite books, journals and websites.' },
-    { type: 'Materials', title: 'Questionnaire design checklist', note: 'Write clear, unbiased survey questions.' },
-    { type: 'Books', title: 'Research methods textbook (sample entry)', note: 'Replace with the books your department recommends.' },
+    { type: 'Materials', title: 'Project plan template', note: 'A ready layout for what you will study, your aims and your questions.' },
+    { type: 'Materials', title: 'How to list your sources (APA 7 guide)', note: 'How to cite books, journals and websites.' },
+    { type: 'Materials', title: 'Checklist for writing good survey questions', note: 'Write clear, unbiased survey questions.' },
+    { type: 'Books', title: 'Research methods textbook (how to do research)', note: 'Replace with the books your department recommends.' },
     { type: 'Books', title: 'Academic writing handbook (sample entry)', note: 'Replace with a real title and link.' },
     { type: 'Similar projects', title: 'Sample: Impact of digital learning on student performance', note: 'See how a complete five-chapter project is structured.' },
-    { type: 'Similar projects', title: 'Sample: SME growth in Lagos', note: 'Mixed-methods example with a survey and interviews.' }
+    { type: 'Similar projects', title: 'Sample: SME growth in Lagos', note: 'Example that uses both a survey and interviews.' }
   ];
   var types = ['All', 'Materials', 'Books', 'Similar projects'], cur = 'All';
   var $ = function (i) { return document.getElementById(i); };

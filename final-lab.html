@@ -42,15 +42,16 @@ body.ws{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-
   #paper h2{page-break-before:always;margin-top:0}
 }
 </style>
+<script src="paywall.js"></script>
 </head>
 <body class="ws">
 <div class="wrap">
   <h1>Final chapter lab</h1>
-  <p class="sub" id="topic">Review, rephrase, format and export your finished project.</p>
+  <p class="sub" id="topic">Check, rewrite, format and download your finished project.</p>
 
   <section class="box">
-    <h2>1. Review and rephrase</h2>
-    <p class="sub">The AI rewrites a chapter in new wording while keeping your meaning, which lowers copied phrasing. The self-check is only a quick scan, not a plagiarism score. Your school's checker has the final say, so keep your sources cited.</p>
+    <h2>1. Check and rewrite in new words</h2>
+    <p class="sub">The AI rewrites a chapter in new words and keeps your meaning, so it does not look copied. The quick check below is a simple scan, not a copy score. Your school's checker has the final say, so always mention your sources.</p>
     <div id="chs" style="margin-top:.6rem"></div>
   </section>
 
@@ -60,17 +61,17 @@ body.ws{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-
       <div><label for="fFont">Font</label><select id="fFont" class="in"><option>Times New Roman</option><option>Arial</option><option>Georgia</option><option>Calibri</option></select></div>
       <div><label for="fSize">Size (pt)</label><select id="fSize" class="in"><option>11</option><option selected>12</option><option>14</option></select></div>
       <div><label for="fLine">Line spacing</label><select id="fLine" class="in"><option>1</option><option selected>1.5</option><option>2</option></select></div>
-      <div><label for="fAlign">Alignment</label><select id="fAlign" class="in"><option>justify</option><option>left</option></select></div>
-      <div><label for="fMar">Margins</label><select id="fMar" class="in"><option value="1">Normal (1 in)</option><option value="1.25">Wide (1.25 in)</option><option value=".75">Narrow (0.75 in)</option></select></div>
+      <div><label for="fAlign">Text edges</label><select id="fAlign" class="in"><option value="justify">Straight on both sides</option><option value="left">Straight on the left only</option></select></div>
+      <div><label for="fMar">Page borders</label><select id="fMar" class="in"><option value="1">Normal (1 inch)</option><option value="1.25">Wide (1.25 inch)</option><option value=".75">Narrow (0.75 inch)</option></select></div>
     </div>
   </section>
 
   <section class="box">
-    <h2>3. Preview and export</h2>
+    <h2>3. Preview and download</h2>
     <p class="sub" id="hint"></p>
     <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.8rem">
-      <button class="b go" id="pdf">Export as PDF</button>
-      <button class="b" id="word">Export as Word</button>
+      <button class="b go" id="pdf">Download as PDF</button>
+      <button class="b" id="word">Download as Word</button>
     </div>
     <article id="paper"></article>
   </section>
@@ -81,7 +82,8 @@ body.ws{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-
 <script>
 (function () {
   var KEY = 'pp_ws2', BAK = 'pp_lab_bak';
-  var NAMES = ['Chapter 1: Introduction', 'Chapter 2: Literature review', 'Chapter 3: Methodology', 'Chapter 4: Results and discussion', 'Chapter 5: Conclusion and recommendations'];
+  var NAMES = ['Chapter 1: Introduction', 'Chapter 2: What others have written (Literature review)', 'Chapter 3: How you did the research (Methodology)', 'Chapter 4: Your results and what they mean', 'Chapter 5: Conclusion and suggestions'];
+  var PRINT = ['Chapter 1: Introduction', 'Chapter 2: Literature Review', 'Chapter 3: Methodology', 'Chapter 4: Results and Discussion', 'Chapter 5: Conclusion and Recommendations'];
   var S = { b: {}, ch: ['', '', '', '', ''] }, bak = {}, pend = {};
   try { var r = JSON.parse(localStorage.getItem(KEY)); if (r && r.ch) S = r; } catch (e) {}
   try { bak = JSON.parse(localStorage.getItem(BAK)) || {}; } catch (e) {}
@@ -97,10 +99,10 @@ body.ws{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-
   function flags(i) {
     var t = S.ch[i] || '', f = [];
     var long = t.split(/(?<=[.!?])\s+/).filter(function (s) { return words(s) > 40; }).length;
-    if (long) f.push(long + ' very long sentence' + (long > 1 ? 's' : '') + ' (over 40 words). Consider splitting.');
+    if (long) f.push(long + ' very long sentence' + (long > 1 ? 's' : '') + ' (over 40 words). Try breaking it into two.');
     var mine = grams(t), dup = 0;
     S.ch.forEach(function (o, j) { if (j !== i && o) { var g = grams(o); Object.keys(mine).forEach(function (k) { if (g[k]) dup++; }); } });
-    if (dup) f.push('Some phrases repeat in other chapters. Reword them.');
+    if (dup) f.push('Some sentences repeat in other chapters. Write them differently.');
     return f;
   }
 
@@ -108,16 +110,16 @@ body.ws{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-
     $('chs').innerHTML = NAMES.map(function (n, i) {
       var w = words(S.ch[i]), f = w ? flags(i) : [], p = pend[i];
       return '<div class="row"><div class="rh"><div><b>' + n + '</b> <span class="sub">' + w + ' words</span></div><div>' +
-        (bak[i] ? '<button class="b" data-a="undo" data-i="' + i + '">Undo rephrase</button> ' : '') +
-        '<button class="b go" data-a="para" data-i="' + i + '"' + (w < 30 ? ' disabled' : '') + '>Rephrase with AI</button></div></div>' +
-        (w < 30 ? '<p class="flags warn">Write at least 30 words in the workspace first.</p>' : f.length ? '<ul class="flags">' + f.map(function (x) { return '<li class="warn">' + esc(x) + '</li>'; }).join('') + '</ul>' : '<p class="flags ok">Self-check found nothing to fix.</p>') +
-        (p ? '<div class="cmp"><div><h4>Your version</h4>' + esc(S.ch[i]) + '</div><div><h4>Rephrased</h4>' + esc(p) + '</div></div><button class="b go" style="margin-top:.7rem" data-a="use" data-i="' + i + '">Use rephrased version</button>' : '') + '</div>';
+        (bak[i] ? '<button class="b" data-a="undo" data-i="' + i + '">Go back to my version</button> ' : '') +
+        '<button class="b go" data-a="para" data-i="' + i + '"' + (w < 30 ? ' disabled' : '') + '>Rewrite in new words</button></div></div>' +
+        (w < 30 ? '<p class="flags warn">Write at least 30 words in the workspace first.</p>' : f.length ? '<ul class="flags">' + f.map(function (x) { return '<li class="warn">' + esc(x) + '</li>'; }).join('') + '</ul>' : '<p class="flags ok">Quick check found nothing to fix.</p>') +
+        (p ? '<div class="cmp"><div><h4>Your version</h4>' + esc(S.ch[i]) + '</div><div><h4>New version</h4>' + esc(p) + '</div></div><button class="b go" style="margin-top:.7rem" data-a="use" data-i="' + i + '">Use the new version</button>' : '') + '</div>';
     }).join('');
   }
   $('chs').addEventListener('click', async function (e) {
     var a = e.target.dataset.a, i = e.target.dataset.i; if (!a) return;
     if (a === 'para') {
-      e.target.disabled = true; e.target.textContent = 'Rephrasing...';
+      e.target.disabled = true; e.target.textContent = 'Rewriting...';
       try {
         // Netlify function holds the Gemini key and checks credits (not built yet)
         var r = await fetch('/.netlify/functions/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'project', task: 'paraphrase', chapter: NAMES[i], brief: S.b, text: S.ch[i] }) });
@@ -135,12 +137,12 @@ body.ws{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-
   var ids = ['fFont', 'fSize', 'fLine', 'fAlign', 'fMar'];
   function cfg() { return { font: $('fFont').value, size: $('fSize').value, line: $('fLine').value, align: $('fAlign').value, mar: $('fMar').value }; }
   function style(c, pad) { return 'font-family:\'' + c.font + '\',serif;font-size:' + c.size + 'pt;line-height:' + c.line + ';text-align:' + c.align + (pad ? ';padding:' + c.mar + 'in' : ''); }
-  function body() { return '<h1>' + esc(S.b.topic || 'Research Project') + '</h1>' + NAMES.map(function (n, i) { return '<h2>' + esc(n) + '</h2><p>' + esc(S.ch[i]) + '</p>'; }).join(''); }
+  function body() { return '<h1>' + esc(S.b.topic || 'Research Project') + '</h1>' + NAMES.map(function (n, i) { return '<h2>' + esc(PRINT[i]) + '</h2><p>' + esc(S.ch[i]) + '</p>'; }).join(''); }
   function ready() { return S.ch.every(function (t) { return words(t) >= 30; }); }
   function render() {
     $('paper').setAttribute('style', style(cfg(), true)); $('paper').innerHTML = body();
     var ok = ready(); $('pdf').disabled = $('word').disabled = !ok;
-    $('hint').textContent = ok ? 'All five chapters are ready. Choose a format.' : 'Write at least 30 words in every chapter to unlock export.';
+    $('hint').textContent = ok ? 'All five chapters are ready. Choose a format.' : 'Write at least 30 words in every chapter to unlock downloads.';
   }
   ids.forEach(function (i) { $(i).addEventListener('change', render); });
   $('pdf').onclick = function () { window.print(); };
