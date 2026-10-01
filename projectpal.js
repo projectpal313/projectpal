@@ -12,9 +12,20 @@
     teal: '#0D9488'
   };
 
-    var PAGES = [
+  var PAGES = [
     { href: 'home.html', label: 'Home' },
-    { href: 'dashboard.html', label: 'Workspace' },
+    { href: 'welcome-hub.html', label: 'Start page' },
+    { href: 'dashboard.html', label: 'Dashboard' },
+    { href: 'profile.html', label: 'Profile' },
+    { href: 'edit-profile.html', label: 'Edit Profile' },
+    { href: 'projects.html', label: 'Projects' },
+    { href: 'project-details.html', label: 'Project Details' },
+    { href: 'team-management.html', label: 'Team Management' },
+    { href: 'collaboration.html', label: 'Collaboration Area' },
+    { href: 'messages.html', label: 'Messages' },
+    { href: 'notifications.html', label: 'Notifications' },
+    { href: 'settings.html', label: 'Settings' },
+    { href: 'help-center.html', label: 'Help Center' },
     { href: 'community.html', label: 'Community' },
     { href: 'literature-review.html', label: 'Literature' },
     { href: 'research-notes.html', label: 'Research' },
@@ -22,8 +33,9 @@
     { href: 'milestone-tracker.html', label: 'Milestones' },
     { href: 'goal-tracker.html', label: 'Goals' },
     { href: 'workspace.html', label: 'Academic Workspace' },
-    { href: 'about.html', label: 'About' },
-    { href: 'welcome-hub.html', label: 'Start page' }
+    { href: 'workspace-video.html', label: 'Workspace Video' },
+    { href: 'quikaz.html', label: 'QuikAz' },
+    { href: 'about.html', label: 'About' }
   ];
 
   var toastTimer = null;
@@ -219,6 +231,14 @@
     updateDOMFromProfile();
     updateDates();
   }
+
+  window.addEventListener('pageshow', function () {
+    var o = document.querySelectorAll('.pp-page-transition');
+    for (var i = 0; i < o.length; i++) o[i].parentNode.removeChild(o[i]);
+  });
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
 
   window.ProjectPal = {
     showToast: showToast,

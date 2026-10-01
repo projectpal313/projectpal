@@ -3,20 +3,14 @@
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ProjectPal — Welcome</title>
-  <script>
-    // Old text-animation intro redirect disabled — replaced by the video intro below.
-    // (intro-animation.html is still in the project if you want to bring it back later.)
-  </script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL = "https://qhcponrxumfnomkgverb.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFoY3BvbnJ4dW1mbm9ta2d2ZXJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyMDMyNzUsImV4cCI6MjEwNTc3OTI3NX0.PWiYx_f-yPLgdCQRz12cU4IazliOhb6W7klWTnGqT_U";
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   </script>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
-  <link rel="stylesheet" href="projectpal.css">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{colors:{ink:'#0F172A',ocean:'#1E3A8A',mist:'#F8FAFC',accent:'#D97706'},fontFamily:{sans:['Inter','system-ui','sans-serif']}}}}</script>
+  <script>tailwind.config={theme:{extend:{colors:{ink:'#102A43',ocean:'#0F766E',mist:'#F5F7FA'}}}}</script>
   <style>
     @keyframes letterDrop {
       0% { opacity: 0; transform: translateY(-80px) rotateX(-90deg) scale(.6); }
@@ -36,12 +30,12 @@
       transform-style: preserve-3d; backface-visibility: hidden;
       opacity: 0; animation: letterDrop .55s ease-out forwards;
     }
-    .letter-ocean { background: linear-gradient(135deg, #1E3A8A, #14B8A6); }
+    .letter-ocean { background: linear-gradient(135deg, #0F766E, #14B8A6); }
     .letter-teal  { background: linear-gradient(135deg, #0D9488, #2DD4BF); }
     .letter-amber { background: linear-gradient(135deg, #D97706, #F59E0B); }
-    .letter-navy  { background: linear-gradient(135deg, #0F172A, #1E3A5F); }
+    .letter-navy  { background: linear-gradient(135deg, #102A43, #1E3A5F); }
     .flash-overlay {
-      position: absolute; inset: 0; background: #0F172A; opacity: 1;
+      position: absolute; inset: 0; background: #102A43; opacity: 1;
       animation: flashOut .6s ease-out forwards; pointer-events: none; z-index: 60;
     }
     .spinner {
@@ -49,25 +43,18 @@
       border: 5px solid rgba(45,212,191,.25); border-top-color: #2DD4BF;
       animation: spinLoader .9s linear infinite;
     }
-    #introVideoOverlay { transition: opacity .6s ease; opacity: 1; }
-    #introVideoOverlay.fade-out { opacity: 0; pointer-events: none; }
-    .tab-active { background: #1E3A8A; color: white; }
+    .tab-active { background: #0F766E; color: white; }
     .tab-inactive { background: transparent; color: #94A3B8; }
     .tab-inactive:hover { color: #E2E8F0; }
+      .bl{display:inline-block;opacity:0;will-change:transform,opacity,filter;transition:opacity .8s ease,transform 1.4s cubic-bezier(.22,1,.36,1),filter .8s ease}
+    @media (prefers-reduced-motion:reduce){.bl{transition:opacity .3s ease}}
   </style>
 </head>
 <body class="bg-ink min-h-screen flex items-center justify-center overflow-hidden">
-  <!-- INTRO VIDEO OVERLAY (plays first, before everything else) -->
-  <div id="introVideoOverlay" class="fixed inset-0 z-[9999] bg-black flex items-center justify-center">
-    <video id="introVideo" autoplay muted playsinline class="absolute inset-0 w-full h-full object-cover">
-      <!-- Place your video file at the project root as intro-video.mp4 -->
-      <source src="intro-video.mp4" type="video/mp4">
-    </video>
-    <button id="introVideoSkip" class="absolute bottom-6 right-6 z-10 rounded-full bg-white/15 backdrop-blur px-5 py-2.5 text-sm font-bold text-white border border-white/25 hover:bg-white/25 transition">Skip →</button>
-  </div>
-
   <!-- INTRO VIDEO STAGE -->
   <div id="introStage" class="fixed inset-0 bg-ink flex items-center justify-center overflow-hidden">
+    <video id="introVideo" class="absolute inset-0 z-20 h-full w-full bg-black object-cover" autoplay muted playsinline preload="auto"><source src="intro-video.mp4" type="video/mp4"></video>
+    <button id="skipIntro" class="absolute bottom-6 right-6 z-30 rounded-xl border border-white/30 bg-black/40 px-4 py-2 text-sm font-bold text-white backdrop-blur hover:bg-black/60">Skip</button>
     <div class="absolute inset-0 bg-gradient-to-br from-ink via-teal-900 to-ink opacity-90"></div>
     <div class="absolute inset-0 flex items-center justify-center">
       <div class="text-center relative z-10 px-5">
@@ -83,6 +70,14 @@
     </div>
   </div>
 
+  <!-- PROJECTPAL BRAND REVEAL -->
+  <div id="brandStage" class="hidden fixed inset-0 z-[55] items-center justify-center bg-black" style="opacity:0;transition:opacity .8s ease">
+    <div class="text-center px-4">
+      <div id="brandWord" role="img" aria-label="PROJECTPAL" class="flex justify-center font-black text-white" style="font-size:clamp(1.7rem,8vw,6rem);letter-spacing:.04em"></div>
+      <div id="brandLine" style="height:1px;width:0;max-width:70%;margin:1.4rem auto 0;background:#fff;transition:width 1.2s cubic-bezier(.65,0,.35,1)"></div>
+    </div>
+  </div>
+
   <!-- LOADER -->
   <div id="loaderSection" class="hidden fixed inset-0 bg-ink flex-col items-center justify-center text-white z-50">
     <div class="spinner"></div>
@@ -92,7 +87,7 @@
 
   <!-- LOGIN / CREATE ACCOUNT SCREEN -->
   <div id="authScreen" class="hidden fixed inset-0 bg-ink flex items-center justify-center p-5 z-40">
-    <div class="w-full max-w-md bg-white rounded-2xl border border-slate-200 overflow-hidden" style="box-shadow: 0 4px 24px rgba(15,23,42,.12);">
+    <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden">
       <div class="p-8 text-center bg-ink">
         <p class="text-xs font-bold uppercase tracking-[.3em] text-teal-300">ProjectPal</p>
         <h1 class="mt-2 text-2xl font-extrabold text-white">Welcome back</h1>
@@ -152,37 +147,64 @@
           if (authScreen) {
             authScreen.classList.remove('hidden');
           }
-        }, 2400);
+        }, 1200);
       }, 400);
     }
 
-    // Intro video: plays first, then hands off to the loader/auth sequence
-    var introVideoOverlay = document.getElementById('introVideoOverlay');
-    var introVideo = document.getElementById('introVideo');
-    var introVideoSkip = document.getElementById('introVideoSkip');
-    var introVideoDone = false;
-
-    function finishIntroVideo() {
-      if (introVideoDone) return; // prevent double-firing from both 'ended' and skip click
-      introVideoDone = true;
-      sessionStorage.setItem('introVideoShown', '1');
-      introVideoOverlay.classList.add('fade-out');
+    // Intro: video -> PROJECTPAL brand reveal -> loader -> login
+    function playBrandReveal() {
+      var stage = document.getElementById('brandStage');
+      var word = document.getElementById('brandWord');
+      var line = document.getElementById('brandLine');
+      var W = window.innerWidth, H = window.innerHeight;
+      stage.classList.remove('hidden'); stage.classList.add('flex');
+      requestAnimationFrame(function () { stage.style.opacity = '1'; });
+      var letters = 'PROJECTPAL'.split('').map(function (ch) {
+        var el = document.createElement('span');
+        el.className = 'bl'; el.textContent = ch;
+        var dx = (Math.random() - .5) * W * .28, dy = (Math.random() - .5) * H * .4;
+        el.dataset.from = 'translate(' + dx + 'px,' + dy + 'px)';
+        el.style.transform = el.dataset.from + ' scale(1.9)'; el.style.filter = 'blur(14px)';
+        word.appendChild(el); return el;
+      });
+      var step = 230;
+      letters.forEach(function (el, i) {
+        setTimeout(function () {
+          el.style.opacity = '1'; el.style.filter = 'blur(0)';
+          el.style.transform = el.dataset.from + ' scale(1.08)';
+        }, 500 + i * step);
+      });
+      var assembleAt = 500 + letters.length * step + 500;
       setTimeout(function () {
-        introVideoOverlay.style.display = 'none';
+        letters.forEach(function (el) { el.style.transform = 'translate(0,0) scale(1)'; });
+        line.style.width = '70%';
+      }, assembleAt);
+      setTimeout(function () { stage.style.opacity = '0'; }, assembleAt + 2900);
+      setTimeout(function () {
+        stage.classList.add('hidden'); stage.classList.remove('flex');
         revealAuthScreen();
-      }, 600); // matches the .6s CSS fade duration
+      }, assembleAt + 3750);
     }
 
-    if (sessionStorage.getItem('introVideoShown')) {
-      // Already watched this session — skip straight to the normal loader flow
-      introVideoOverlay.style.display = 'none';
+    var introDone = false;
+    function endIntro() {
+      if (introDone) return; introDone = true;
+      sessionStorage.setItem('ppIntroPlayed', '1');
+      var intro = document.getElementById('introStage');
+      try { document.getElementById('introVideo').pause(); } catch (e) {}
+      intro.style.transition = 'opacity .6s ease'; intro.style.opacity = '0';
+      setTimeout(function () { intro.style.display = 'none'; playBrandReveal(); }, 600);
+    }
+
+    if (sessionStorage.getItem('ppIntroPlayed')) {
       revealAuthScreen();
     } else {
-      introVideo.addEventListener('ended', finishIntroVideo);
-      introVideoSkip.addEventListener('click', finishIntroVideo);
-      // Safety net: if the video fails to load/play for any reason, don't trap the user
-      introVideo.addEventListener('error', finishIntroVideo);
-      setTimeout(finishIntroVideo, 15000); // hard fallback in case nothing else fires
+      var iv = document.getElementById('introVideo');
+      iv.addEventListener('ended', endIntro);
+      iv.addEventListener('error', endIntro);
+      document.getElementById('skipIntro').addEventListener('click', endIntro);
+      var p = iv.play(); if (p && p.catch) p.catch(endIntro);
+      setTimeout(function () { if (!iv.currentTime) endIntro(); }, 6000);
     }
 
     // Tab switching
@@ -218,7 +240,7 @@
       }
       err.classList.add('hidden');
       
-      if (!supabaseClient) {
+      if (!supabase) {
         err.textContent = 'The login service is not ready yet. Please check your internet connection and refresh the page.';
         err.classList.remove('hidden');
         return;
@@ -229,7 +251,7 @@
           throw new Error('Supabase project URL and anon key are not configured yet.');
         }
 
-        var { data, error } = await supabaseClient.auth.signInWithPassword({
+        var { data, error } = await supabase.auth.signInWithPassword({
           email: email.toLowerCase().trim(),
           password: password
         });
@@ -245,7 +267,7 @@
           id: user.id
         };
 
-        var { data: profileData, error: profileError } = await supabaseClient
+        var { data: profileData, error: profileError } = await supabase
           .from('users')
           .select('name, email')
           .eq('id', user.id)
@@ -258,7 +280,7 @@
         if (profileData) {
           profile.name = profileData.name || profile.name;
         } else {
-          var insertResult = await supabaseClient.from('users').upsert({
+          var insertResult = await supabase.from('users').upsert({
             id: user.id,
             name: profile.name,
             email: user.email
@@ -290,7 +312,7 @@
       }
       err.classList.add('hidden');
 
-      if (!supabaseClient) {
+      if (!supabase) {
         err.textContent = 'The signup service is not ready yet. Please check your internet connection and refresh the page.';
         err.classList.remove('hidden');
         return;
@@ -301,7 +323,7 @@
           throw new Error('Supabase project URL and anon key are not configured yet.');
         }
 
-        var { data, error } = await supabaseClient.auth.signUp({
+        var { data, error } = await supabase.auth.signUp({
           email: email.toLowerCase().trim(),
           password: password,
           options: {
@@ -314,7 +336,7 @@
         }
 
         if (data.user) {
-          var { error: profileError } = await supabaseClient.from('users').upsert({
+          var { error: profileError } = await supabase.from('users').upsert({
             id: data.user.id,
             name: name.trim(),
             email: data.user.email

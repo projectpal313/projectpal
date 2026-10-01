@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Edit Profile - ProjectPal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{ink:'#102A43',ocean:'#0F766E'}}}}</script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="projectpal.css">
+  <style>body{background:#F5F7FA;color:#334155}.f{margin-top:.4rem;width:100%;border-radius:.75rem;border:1px solid #cbd5e1;background:#fff;padding:.6rem .9rem}.f:focus{outline:none;border-color:#0F766E;box-shadow:0 0 0 3px rgba(20,184,166,.2)}</style>
+</head>
+<body class="min-h-screen">
+  <header class="bg-white border-b border-slate-200">
+    <div class="mx-auto flex max-w-[90rem] items-center justify-between px-5 py-4 sm:px-8">
+      <a href="welcome-hub.html" class="flex items-center gap-2 text-lg font-extrabold text-ink"><span class="grid h-10 w-10 place-items-center rounded-xl bg-ocean text-white">P</span>ProjectPal</a>
+      <a href="profile.html" class="rounded-xl border border-slate-200 px-4 py-2 text-sm font-bold text-ink hover:bg-slate-50">&larr; View profile</a>
+    </div>
+  </header>
+  <main class="mx-auto max-w-4xl px-5 py-10 sm:px-8">
+    <h1 class="text-3xl font-extrabold text-ink">Edit your profile</h1>
+    <p class="mt-2 text-slate-600">Tell us about yourself so ProjectPal can fit your work. You can change this any time.</p>
+    <form id="pf" class="mt-8 space-y-6" novalidate>
+      <section class="rounded-2xl border border-slate-200 bg-white p-6">
+        <h2 class="text-lg font-bold text-ink">Profile picture</h2>
+        <div class="mt-4 flex items-center gap-5">
+          <div id="av" class="grid h-24 w-24 place-items-center overflow-hidden rounded-2xl bg-slate-100 text-3xl font-black text-slate-400">?</div>
+          <div><input id="avFile" type="file" accept="image/*" class="text-sm"><p class="mt-1 text-xs text-slate-500">Square photos work best. It is resized automatically.</p></div>
+        </div>
+      </section>
+      <div id="sections" class="space-y-6"></div>
+      <div class="flex flex-wrap items-center gap-4">
+        <button id="save" type="submit" class="rounded-xl bg-ocean px-6 py-3 font-bold text-white hover:bg-teal-800">Save profile</button>
+        <p id="status" class="text-sm font-semibold text-slate-600" role="status"></p>
+      </div>
+    </form>
+  </main>
+  <script src="projectpal.js"></script>
+  <script>
+  var SUPABASE_URL="https://qhcponrxumfnomkgverb.supabase.co";
+  var SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFoY3BvbnJ4dW1mbm9ta2d2ZXJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyMDMyNzUsImV4cCI6MjEwNTc3OTI3NX0.PWiYx_f-yPLgdCQRz12cU4IazliOhb6W7klWTnGqT_U";
+  var sb=window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
+  var SECTIONS=[
+   ['Basic information',[['fullName','Full name','text'],['preferredName','Preferred name','text'],['age','Age','number'],['gender','Gender','select',['Female','Male','Non-binary','Prefer not to say']],['email','Email address','email'],['phone','Phone number','tel']]],
+   ['Academic information',[['school','School name','text'],['department','Department','text'],['faculty','Faculty','text'],['course','Course of study','text'],['level','Level / Year','select',['100 Level','200 Level','300 Level','400 Level','500 Level','Postgraduate']],['studentId','Student ID (optional)','text']]],
+   ['User type',[['userType','Where are you in your journey?','select',['Beginner','Intermediate','Professional']]]],
+   ['Skills and background',[['interests','Areas of interest','text','','Separate with commas'],['techSkills','Technical skills','text','','Separate with commas'],['languages','Programming languages','text','','Separate with commas'],['designSkills','Design skills','text','','Separate with commas'],['experience','Previous project experience','area'],['careerGoals','Career goals','area']]],
+   ['Project preferences',[['categories','Preferred project categories','checks',['Research','Software','Design','Business','Engineering','Health','Education','Media']],['teamSize','Preferred team size','select',['Solo','2-3 people','4-5 people','6+ people']],['collabStyle','Collaboration style','select',['Independent','Balanced','Highly collaborative','Mostly remote','In person']],['availability','Availability','select',['Weekdays','Evenings','Weekends','Flexible','Full time']],['skillRating','Skill level rating (1 = new, 5 = expert)','select',['1','2','3','4','5']]]],
+   ['Additional information',[['bio','Biography / About me','area'],['linkedin','LinkedIn URL','url'],['github','GitHub URL','url'],['portfolio','Portfolio URL','url'],['location','Location','text'],['language','Preferred language','select',['English','French','Yoruba','Igbo','Hausa','Other']],['timezone','Time zone','tz']]]
+  ];
+  var FIELDS=[],avatar='',esc=function(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')};
+  var tzs=(Intl.supportedValuesOf?Intl.supportedValuesOf('timeZone'):['Africa/Lagos','UTC','Europe/London','America/New_York']);
+  function opts(a){return '<option value="">Select</option>'+a.map(function(o){return '<option>'+esc(o)+'</option>'}).join('')}
+  function build(){
+   document.getElementById('sections').innerHTML=SECTIONS.map(function(s){
+    return '<section class="rounded-2xl border border-slate-200 bg-white p-6"><h2 class="text-lg font-bold text-ink">'+s[0]+'</h2><div class="mt-4 grid gap-4 md:grid-cols-2">'+s[1].map(function(f){
+     FIELDS.push(f);var k=f[0],t=f[2],l='<label class="block text-sm font-semibold text-slate-700" for="'+k+'">'+f[1]+'</label>',w=(t==='area'||t==='checks')?' md:col-span-2':'',c;
+     if(t==='select')c='<select id="'+k+'" class="f">'+opts(f[3])+'</select>';
+     else if(t==='tz')c='<select id="'+k+'" class="f">'+opts(tzs)+'</select>';
+     else if(t==='area')c='<textarea id="'+k+'" rows="3" class="f"></textarea>';
+     else if(t==='checks')c='<div id="'+k+'" class="mt-2 flex flex-wrap gap-2">'+f[3].map(function(o){return '<label class="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-sm"><input type="checkbox" value="'+esc(o)+'"> '+esc(o)+'</label>'}).join('')+'</div>';
+     else c='<input id="'+k+'" type="'+t+'" class="f"'+(f[4]?' placeholder="'+esc(f[4])+'"':'')+(t==='number'?' min="10" max="100"':'')+'>';
+     return '<div class="'+w.trim()+'">'+l+c+'</div>'}).join('')+'</div></section>'}).join('');
+  }
+  function collect(){var d={};FIELDS.forEach(function(f){var k=f[0],el=document.getElementById(k);
+   d[k]=f[2]==='checks'?[].map.call(el.querySelectorAll('input:checked'),function(i){return i.value}):el.value.trim()});
+   d.avatar=avatar;return d}
+  function fill(d){if(!d)return;FIELDS.forEach(function(f){var k=f[0],el=document.getElementById(k),v=d[k];if(v===undefined||v===null)return;
+   if(f[2]==='checks')[].forEach.call(el.querySelectorAll('input'),function(i){i.checked=(v||[]).indexOf(i.value)>-1});else el.value=v});
+   if(d.avatar)setAvatar(d.avatar)}
+  function setAvatar(u){avatar=u;var a=document.getElementById('av');a.innerHTML='<img alt="Profile picture" class="h-full w-full object-cover">';a.firstChild.src=u}
+  document.getElementById('avFile').addEventListener('change',function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();
+   r.onload=function(){var im=new Image();im.onload=function(){var c=document.createElement('canvas'),s=256,m=Math.min(im.width,im.height);c.width=c.height=s;
+    c.getContext('2d').drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,s,s);setAvatar(c.toDataURL('image/jpeg',.82))};im.src=r.result};r.readAsDataURL(f)});
+  function say(m,bad){var s=document.getElementById('status');s.textContent=m;s.style.color=bad?'#b91c1c':'#0F766E'}
+  build();
+  var tz=document.getElementById('timezone');try{tz.value=Intl.DateTimeFormat().resolvedOptions().timeZone}catch(e){}
+  fill(ProjectPal.getProfile());
+  var uid=null;
+  (async function(){
+   if(!sb)return;
+   try{var u=await sb.auth.getUser();uid=u.data&&u.data.user?u.data.user.id:null;
+    if(!uid){say('You are not logged in, so changes will save on this device only.',true);return}
+    var em=document.getElementById('email');if(!em.value)em.value=u.data.user.email||'';
+    var r=await sb.from('user_profiles').select('data').eq('id',uid).maybeSingle();
+    if(r.data&&r.data.data)fill(r.data.data)}catch(e){}
+  })();
+  document.getElementById('pf').addEventListener('submit',async function(e){
+   e.preventDefault();var d=collect();
+   if(!d.fullName){say('Enter your full name first.',true);document.getElementById('fullName').focus();return}
+   if(d.age&&(d.age<10||d.age>100)){say('Enter a real age between 10 and 100.',true);return}
+   ProjectPal.setProfile(Object.assign({},d,{name:d.fullName}));
+   var b=document.getElementById('save');b.disabled=true;say('Saving...');
+   try{
+    if(sb&&uid){
+     var r=await sb.from('user_profiles').upsert({id:uid,data:d,updated_at:new Date().toISOString()});
+     if(r.error)throw r.error;
+     await sb.from('users').upsert({id:uid,name:d.fullName,email:d.email||undefined});
+     say('Profile saved.');ProjectPal.showToast('Profile saved.',{type:'success'});
+    }else{say('Saved on this device. Log in to save it to your account.');ProjectPal.showToast('Saved on this device.',{type:'warning'})}
+   }catch(err){say('Saved on this device, but the account save failed. Run the one-time setup in supabase-profile.sql.',true)}
+   b.disabled=false});
+  </script>
+</body>
+</html>
