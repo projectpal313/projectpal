@@ -13,14 +13,17 @@
   function unlock() { var g = document.getElementById('ppGate'); if (g) g.remove(); document.documentElement.style.overflow = ''; }
   function gate(html) {
     var g = document.getElementById('ppGate');
-    if (!g) { g = document.createElement('div'); g.id = 'ppGate'; g.style.cssText = 'visibility:visible;position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:1rem;background:rgba(16,42,67,.6);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);font-family:system-ui,-apple-system,"Segoe UI",sans-serif'; document.body.appendChild(g); document.documentElement.style.overflow = 'hidden'; }
+    if (!g) { g = document.createElement('div'); g.id = 'ppGate'; g.style.cssText = 'visibility:visible;position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:1rem;background:rgba(16,42,67,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-family:system-ui,-apple-system,"Segoe UI",sans-serif'; document.body.appendChild(g); document.documentElement.style.overflow = 'hidden'; }
     g.innerHTML = '<div style="background:#fff;color:#334155;max-width:26rem;width:100%;border-radius:1.2rem;padding:2rem;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35)">' + html + '</div>';
   }
   var btn = 'display:block;width:100%;margin-top:1rem;padding:.85rem;border:0;border-radius:.75rem;background:#0F766E;color:#fff;font-weight:700;font-size:1rem;cursor:pointer;text-decoration:none';
   function showPay(msg) {
     gate('<h2 style="font-size:1.3rem;font-weight:800;color:#102A43">Access denied</h2><p style="margin-top:.6rem">You can look around, but you need to pay <b>' + CFG.price + '</b> once to use the workspace, resources and final chapter lab.</p><button id="ppPay" style="' + btn + '">Pay ' + CFG.price + '</button><button id="ppCheck" style="' + btn.replace('background:#0F766E;color:#fff', 'background:#fff;color:#0F766E;border:1px solid #0F766E') + '">I have already paid</button><a href="home.html" style="display:block;margin-top:1rem;font-size:.9rem;color:#0F766E">Back to Home</a><p id="ppMsg" style="margin-top:.8rem;font-size:.85rem;color:#B91C1C" role="alert">' + (msg || '') + '</p>');
     document.getElementById('ppPay').onclick = pay;
-    document.getElementById('ppCheck').onclick = function () { check('We could not see your payment yet. Wait a minute and try again.'); };
+    document.getElementById('ppCheck').onclick = async function () {
+      var ref = ''; try { ref = localStorage.getItem('pp_last_ref') || ''; } catch (e) {}
+      if (ref) { say('Checking your payment...'); await confirm(ref); } else check('We could not find a payment. Tap Pay to start.');
+    };
   }
   function say(m) { var e = document.getElementById('ppMsg'); if (e) e.textContent = m; }
   async function check(failMsg) {
@@ -34,6 +37,7 @@
     say('');
     try { if (!window.PaystackPop) await load('https://js.paystack.co/v1/inline.js'); } catch (e) { return say('Could not load the payment window. Check your internet and try again.'); }
     var ref = 'PP' + Date.now() + user.id.slice(0, 6);
+    try { localStorage.setItem('pp_last_ref', ref); } catch (e) {}
     window.PaystackPop.setup({
       key: CFG.paystackKey, email: user.email, amount: CFG.amount, currency: 'NGN', ref: ref,
       metadata: { user_id: user.id },
@@ -59,6 +63,11 @@
       user = session && session.user;
     } catch (e) {}
     if (!user) return gate('<h2 style="font-size:1.3rem;font-weight:800;color:#102A43">Access denied</h2><p style="margin-top:.6rem">Log in with your account to use the workspace.</p><a href="login.html" style="' + btn + '">Go to login</a><a href="home.html" style="display:block;margin-top:1rem;font-size:.9rem;color:#0F766E">Back to Home</a>');
+    try {
+      var owner = localStorage.getItem('pp_owner');
+      if (owner && owner !== user.id) { ['pp_ws2', 'pp_lab_bak', 'pp_last_ref'].forEach(function (k) { localStorage.removeItem(k); }); localStorage.setItem('pp_owner', user.id); return location.reload(); }
+      localStorage.setItem('pp_owner', user.id);
+    } catch (e) {}
     check('');
   }
   if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
