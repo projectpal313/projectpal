@@ -1,0 +1,74 @@
+(function(){
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let S={credits:150,cad:0,mode:'basic',dept:'',img:false,ocr:''};
+try{Object.assign(S,JSON.parse(localStorage.getItem('qz_state')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('qz_state',JSON.stringify(S))}catch(e){}};
+const toast=m=>{const t=$('#toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',2600)};
+function paint(){$('#cr').textContent=S.credits;$('#cad').textContent=S.cad;$('#dept').value=S.dept;
+ $$('#modes button').forEach(b=>b.classList.toggle('on',b.dataset.m===S.mode));$('#est').textContent=est()}
+// Cost: words in the prompt + answer depth + model + image
+function est(text){text=text===undefined?$('#q').value:text;const w=text.trim().split(/\s+/).filter(Boolean).length;
+ if(!w)return 0;return Math.max(1,Math.ceil((Math.ceil(w/40)+(S.mode==='advanced'?6:2)+(S.img?3:0))*parseFloat($('#model').value)))}
+// Departmental duplicate check (demo store in this browser; move to Supabase for real cross-student checks)
+const words=t=>t.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/).filter(w=>w.length>2);
+const hash=w=>{let h=5381;for(const c of w)h=((h<<5)+h+c.charCodeAt(0))>>>0;return h};
+const sig=t=>[...new Set(words(t).map(hash))];
+const key=()=>'qz_dept_'+(S.dept||'general').toLowerCase();
+const seen=()=>{try{return JSON.parse(localStorage.getItem(key())||'[]')}catch(e){return[]}};
+function similar(t){const a=new Set(sig(t));if(a.size<3)return false;
+ return seen().some(b=>{const s=new Set(b),i=[...a].filter(x=>s.has(x)).length;return i/(a.size+s.size-i)>=0.7})}
+function remember(t){try{const l=seen();l.push(sig(t));localStorage.setItem(key(),JSON.stringify(l.slice(-200)))}catch(e){}}
+// AI call: uses your Netlify function if it exists, else a demo answer
+async function callAI(p){
+ try{const r=await fetch('/.netlify/functions/quikaz',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
+  if(r.ok){const d=await r.json();if(d.answer)return d.answer}}catch(e){}
+ return `## ${{brainstorm:'Topic ideas',audit:'Review and audit'}[p.task]||'Answer'}\n\nDemo answer. Connect a backend to get real responses. Inline math works: the quadratic formula is $x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}$.\n\n$$E=mc^2$$\n\n| Item | Detail |\n|---|---|\n| Mode | ${p.mode} |\n| Model weight | ${p.model} |\n\n- Point one\n- Point two\n\n**Your input:** ${p.text.slice(0,200)}`}
+// Small markdown renderer (headings, bold, italic, lists, tables). Math is kept for KaTeX.
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const inl=s=>esc(s).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/(^|\s)_(.+?)_/g,'$1<i>$2</i>');
+function md(t){const L=t.split('\n');let o='',i=0;
+ while(i<L.length){const l=L[i];
+  if(/^\|/.test(l)&&/^\|[\s\-|:]+$/.test(L[i+1]||'')){const h=l.split('|').slice(1,-1);o+='<table><tr>'+h.map(c=>'<th>'+inl(c.trim())+'</th>').join('')+'</tr>';i+=2;
+   while(/^\|/.test(L[i]||'')){o+='<tr>'+L[i].split('|').slice(1,-1).map(c=>'<td>'+inl(c.trim())+'</td>').join('')+'</tr>';i++}o+='</table>';continue}
+  if(/^- /.test(l)){o+='<ul>';while(/^- /.test(L[i]||'')){o+='<li>'+inl(L[i].slice(2))+'</li>';i++}o+='</ul>';continue}
+  const h=l.match(/^(#{1,3}) (.*)/);if(h)o+=`<h${h[1].length}>${inl(h[2])}</h${h[1].length}>`;else if(l.trim())o+='<p>'+inl(l)+'</p>';i++}
+ return o}
+function show(t){const p=$('#paper');p.innerHTML=md(t);
+ if(window.renderMathInElement)renderMathInElement(p,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}
+function append(t){const p=$('#paper');if(p.querySelector('.empty'))p.innerHTML='';const d=document.createElement('div');d.innerHTML=md(t);p.appendChild(d);
+ if(window.renderMathInElement)renderMathInElement(d,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}
+async function run(task,text,rep){const cost=est(text);
+ if(S.credits<cost)return toast('Not enough credits. This needs '+cost+'.');
+ $('#ask').disabled=true;
+ try{const a=await callAI({task,text,mode:S.mode,model:$('#model').value,dept:S.dept,ocr:S.ocr});
+  S.credits-=cost;save();paint();rep?append(a):show(a);remember(text);toast('Done. '+cost+' credits used.')}
+ finally{$('#ask').disabled=false}}
+let pending='';
+function ask(force){const t=$('#q').value.trim();if(!t)return toast('Type a question first.');
+ if(!force&&similar(t)){pending=t;return $('#dup').classList.add('open')}run('answer',t)}
+$('#ask').onclick=()=>ask(false);
+$('#go').onclick=()=>{$('#dup').classList.remove('open');ask(true)};
+$('#remodel').onclick=()=>{$('#dup').classList.remove('open');const t=pending+'\n\nAnswer with a unique structure, wording and examples.';$('#q').value=t;run('answer',t)};
+$$('[data-t]').forEach(b=>b.onclick=()=>{const t=$('#q').value.trim();if(!t)return toast('Type a topic or paste an answer first.');run(b.dataset.t,t)});
+$('#expand').onclick=()=>{const s=String(getSelection());if(!s.trim())return toast('Select a paragraph in the answer first.');run('expand','Expand in more depth: '+s,true)};
+$('#modes').onclick=e=>{if(e.target.dataset.m){S.mode=e.target.dataset.m;save();paint()}};
+$('#model').onchange=paint;$('#q').oninput=paint;
+$('#dept').onchange=e=>{S.dept=e.target.value.trim();save()};
+$$('.fmt [data-f]').forEach(b=>b.onclick=()=>{const q=$('#q'),f=b.dataset.f.replace('\\n','\n'),a=q.selectionStart,e=q.selectionEnd,v=q.value,sel=v.slice(a,e);
+ q.value=v.slice(0,a)+(f.trim()?(f.startsWith('\n')?f+sel:f+sel+f):'')+v.slice(e);q.focus();paint()});
+// Image + OCR (loads the OCR library only when needed)
+$('#img').onchange=async e=>{const f=e.target.files[0];if(!f)return;S.img=true;$('#imgname').textContent=f.name;paint();toast('Reading text from image…');
+ try{if(!window.Tesseract)await new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.5/tesseract.min.js';s.onload=ok;s.onerror=no;document.head.appendChild(s)});
+  const r=await Tesseract.recognize(f,'eng');S.ocr=r.data.text;$('#q').value+=(($('#q').value?'\n':'')+r.data.text.trim());paint();toast('Text added from image.')}
+ catch(err){toast('Could not read the image. Type the text instead.')}};
+// Store
+$('#buy').onclick=()=>$('#store').classList.add('open');
+$('#pay').onclick=()=>{S.cad+=500;save();paint();$('#store').classList.remove('open');toast('500 AutoCAD Units added (demo).')};
+$$('[data-close]').forEach(b=>b.onclick=()=>b.closest('.modal').classList.remove('open'));
+// Export
+$('#pdf').onclick=()=>window.print();
+$('#doc').onclick=()=>{const h='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><style>@page{margin:1in}body{font:12pt "Times New Roman",serif;line-height:1.5}table{border-collapse:collapse}td,th{border:1px solid #000;padding:4px}</style></head><body>'+$('#paper').innerHTML+'</body></html>';
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff',h],{type:'application/msword'}));a.download='quikaz-answer.doc';a.click()};
+$('#menu').onclick=()=>$('#side').classList.toggle('open');
+paint();
+})();
