@@ -1,27 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Home - ProjectPal</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{colors:{ink:'#102A43',ocean:'#0F766E'}}}}</script>
-  <link rel="stylesheet" href="projectpal.css">
-  <style>body{background:#F5F7FA;color:#334155}</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Home - ProjectPal</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{ink:'#102A43',ocean:'#0F766E',royal:'#1E3A8A',gold:'#D97706'}}}}</script>
+<link rel="stylesheet" href="projectpal.css">
+<style>
+body{background:#F5F7FA;color:#334155}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:1.25rem;padding:1.5rem;box-shadow:0 12px 30px rgba(16,42,67,.06)}
+.f{width:100%;border-radius:.75rem;border:1px solid #cbd5e1;background:#fff;padding:.6rem .9rem}
+.f:focus{outline:none;border-color:#0F766E;box-shadow:0 0 0 3px rgba(20,184,166,.2)}
+.btn{border-radius:.75rem;background:#0F766E;color:#fff;font-weight:700;padding:.7rem 1.3rem;transition:.2s}.btn:hover{background:#115e59;transform:translateY(-1px)}
+.bar{height:.55rem;border-radius:9999px;background:#e2e8f0;overflow:hidden}.bar i{display:block;height:100%;border-radius:9999px;transition:width .9s cubic-bezier(.22,1,.36,1)}
+.chip{position:absolute;white-space:nowrap;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#dbeafe;border-radius:9999px;padding:.35rem .9rem;font-size:.8rem;animation:fl 9s ease-in-out infinite}
+@keyframes fl{0%,100%{transform:translate(0,0)}50%{transform:translate(14px,-18px)}}
+.stage{border:1px solid #e2e8f0;border-radius:.9rem;padding:.6rem .9rem;font-weight:700;background:#fff;transition:.2s}.stage.on{background:#1E3A8A;color:#fff;border-color:#1E3A8A}
+.fade{animation:fd .5s ease-out}@keyframes fd{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.chip,.fade{animation:none}}
+</style>
 </head>
-<body class="min-h-screen">
-  <header class="bg-white border-b border-slate-200">
-    <div class="mx-auto flex max-w-[90rem] items-center justify-between px-5 py-4 sm:px-8">
-      <a href="welcome-hub.html" class="flex items-center gap-2 text-lg font-extrabold text-ink"><span class="grid h-10 w-10 place-items-center rounded-xl bg-ocean text-white">P</span>ProjectPal</a>
-      <a href="dashboard.html" class="rounded-xl border border-slate-200 px-4 py-2 text-sm font-bold text-ink hover:bg-slate-50">&larr; Back to Dashboard</a>
-    </div>
-  </header>
-  <main class="mx-auto max-w-4xl px-5 py-16 text-center sm:px-8">
-    <p class="text-sm font-bold uppercase tracking-wider text-ocean">Home</p>
-    <h1 class="mt-2 text-3xl font-extrabold text-ink sm:text-4xl">Home is coming soon.</h1>
-    <p class="mt-3 text-slate-600">Your project at a glance. This page is a placeholder for now.</p>
-    <a href="dashboard.html" class="mt-8 inline-block rounded-xl bg-ocean px-6 py-3 font-bold text-white hover:bg-teal-800">Back to Dashboard</a>
-  </main>
-  <script src="projectpal.js"></script>
+<body data-sidebar class="min-h-screen lg:pr-60">
+<header class="sticky top-0 z-30 border-b border-slate-200 bg-white/90 backdrop-blur">
+ <div class="mx-auto flex max-w-5xl items-center justify-between px-5 py-3">
+  <div class="flex items-center gap-2">
+   <button data-hist onclick="history.back()" aria-label="Back" class="rounded-lg border border-slate-200 px-3 py-1.5 font-bold hover:bg-slate-50">&larr;</button>
+   <button onclick="history.forward()" aria-label="Forward" class="rounded-lg border border-slate-200 px-3 py-1.5 font-bold hover:bg-slate-50">&rarr;</button>
+  </div>
+  <a href="welcome-hub.html" class="flex items-center gap-2 text-lg font-extrabold text-ink"><span class="grid h-9 w-9 place-items-center rounded-xl bg-ocean text-white">P</span>ProjectPal</a>
+  <a href="notifications.html" aria-label="Notifications" class="rounded-lg border border-slate-200 px-3 py-1.5 hover:bg-slate-50">🔔</a>
+ </div>
+</header>
+<main class="mx-auto max-w-5xl space-y-10 px-5 py-8">
+
+<section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-ink via-royal to-ocean p-7 text-white sm:p-12">
+ <div id="chips" aria-hidden="true"></div>
+ <div class="relative z-10 max-w-2xl">
+  <h1 class="text-3xl font-extrabold tracking-tight sm:text-5xl">Build Your Final Year Project Without The Stress</h1>
+  <p class="mt-4 text-lg text-slate-200">From idea generation to proposal writing, development, documentation, supervision, and defense. Everything in one workspace.</p>
+  <div class="mt-7 flex flex-wrap gap-3">
+   <a href="dashboard.html" class="rounded-xl bg-gold px-6 py-3 font-bold text-white hover:bg-amber-600">Start My Project</a>
+   <a href="#idea" class="rounded-xl border border-white/40 px-6 py-3 font-bold hover:bg-white/10">Generate Project Idea</a>
+  </div>
+ </div>
+</section>
+
+<section id="vid" class="card p-3">
+ <div id="vbox" class="relative aspect-video cursor-pointer overflow-hidden rounded-2xl bg-ink">
+  <div class="absolute inset-0 grid place-items-center"><div class="text-center text-white"><div class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-ocean text-2xl">▶</div><p class="mt-3 font-bold">Watch the introduction</p></div></div>
+ </div>
+</section>
+
+<section class="grid gap-4 md:grid-cols-3">
+ <div class="card"><p class="text-sm font-bold text-slate-500">⏱️ Defense Countdown</p>
+  <div class="mt-3 flex gap-3 text-center" id="cd"><div><b class="text-3xl text-ink" id="cdD">0</b><p class="text-xs">days</p></div><div><b class="text-3xl text-ink" id="cdH">0</b><p class="text-xs">hours</p></div><div><b class="text-3xl text-ink" id="cdM">0</b><p class="text-xs">minutes</p></div></div>
+  <label class="mt-3 block text-xs font-semibold">Your defense date<input id="cdDate" type="date" class="f mt-1"></label></div>
+ <div class="card"><p class="text-sm font-bold text-slate-500">💪 Project Health Score</p>
+  <p class="mt-2 text-4xl font-extrabold text-ocean"><span id="hs">0</span><span class="text-lg text-slate-400">/100</span></p>
+  <div id="hm" class="mt-3 space-y-2"></div><p class="mt-2 text-xs text-slate-400">Example scores until your progress is connected.</p></div>
+ <div class="card"><p class="text-sm font-bold text-slate-500">📋 Today's Focus</p>
+  <p class="mt-2 text-lg font-extrabold text-ink" id="greet">Hello</p>
+  <ul id="todo" class="mt-2 space-y-2 text-sm"></ul><p class="mt-3 text-xs text-slate-500">Estimated effort: 2 hours</p></div>
+</section>
+
+<section id="idea" class="card">
+ <h2 class="text-2xl font-extrabold text-ink">AI Project Idea Generator</h2>
+ <p class="mt-1 text-slate-600">Stuck on a topic? Tell us about you and get an idea to start from.</p>
+ <div class="mt-4 grid gap-3 sm:grid-cols-3">
+  <label class="text-sm font-semibold">Department<select id="gd" class="f mt-1"></select></label>
+  <label class="text-sm font-semibold">Area of interest<select id="gi" class="f mt-1"></select></label>
+  <label class="text-sm font-semibold">Skill level<select id="gl" class="f mt-1"><option>Beginner</option><option selected>Intermediate</option><option>Advanced</option></select></label>
+ </div>
+ <button id="gen" class="btn mt-4">Generate Project Idea</button>
+ <div id="genOut" class="mt-5"></div>
+</section>
+
+<section class="card">
+ <h2 class="text-2xl font-extrabold text-ink">Rate My Project Idea</h2>
+ <p class="mt-1 text-slate-600">Type your idea in a sentence or two. This is a quick estimate, not a final grade.</p>
+ <textarea id="ri" rows="3" class="f mt-4" placeholder="e.g. AI voting system that verifies voters with face recognition"></textarea>
+ <button id="rate" class="btn mt-3">Rate my idea</button>
+ <div id="rateOut" class="mt-5"></div>
+</section>
+
+<section class="card">
+ <h2 class="text-2xl font-extrabold text-ink">Your Project Journey</h2>
+ <p class="mt-1 text-slate-600">Tap a stage to see what to do, what to avoid, and a tip.</p>
+ <div id="rm" class="mt-4 flex flex-wrap gap-2"></div>
+ <div id="rmOut" class="mt-4 rounded-2xl bg-slate-50 p-5"></div>
+</section>
+
+<section class="grid gap-4 md:grid-cols-2">
+ <div class="card"><h2 class="text-xl font-extrabold text-ink">Find Similar Students</h2><p class="mt-1 text-sm text-slate-500">Examples of how matches will look.</p><div id="sim" class="mt-4 space-y-3"></div></div>
+ <div class="card"><h2 class="text-xl font-extrabold text-ink">Project of the Week</h2>
+  <div class="mt-4 grid h-36 place-items-center rounded-2xl bg-gradient-to-br from-teal-400 to-royal text-5xl">🌱</div>
+  <p class="mt-3 text-lg font-extrabold text-ink">AI Crop Disease Detector</p>
+  <p class="text-sm text-slate-600">Built by Amara Okafor, UNILAG</p><span class="mt-2 inline-block rounded-full bg-teal-50 px-3 py-1 text-xs font-bold text-ocean">Agriculture + AI</span>
+  <p class="mt-2 text-xs text-slate-400">Sample showcase.</p></div>
+</section>
+
+<section class="card">
+ <h2 class="text-2xl font-extrabold text-ink">Success Stories</h2>
+ <div id="story" class="fade mt-4 border-l-4 border-gold pl-4"></div>
+ <div id="dots" class="mt-4 flex gap-2"></div>
+</section>
+
+<section class="grid gap-4 md:grid-cols-2">
+ <div class="card"><h2 class="text-xl font-extrabold text-ink">Live Platform Activity</h2><ul id="feed" class="mt-3 space-y-2 text-sm"></ul><p class="mt-2 text-xs text-slate-400">Sample activity.</p></div>
+ <div class="card"><h2 class="text-xl font-extrabold text-ink">ProjectPal in numbers</h2>
+  <div class="mt-4 grid grid-cols-2 gap-4" id="stats"></div><p class="mt-3 text-xs text-slate-400">Sample figures until real data is connected.</p></div>
+</section>
+
+<section class="rounded-3xl bg-gradient-to-br from-amber-500 to-gold p-8 text-white">
+ <h2 class="text-2xl font-extrabold">Unlock ProjectPal Premium</h2>
+ <ul class="mt-3 grid gap-1 sm:grid-cols-2"><li>✓ AI Writing Assistant</li><li>✓ Supervisor Matching</li><li>✓ Team Collaboration Tools</li><li>✓ Research Assistant</li><li>✓ Project Evaluation Tools</li></ul>
+ <button id="plans" class="mt-5 rounded-xl bg-white px-6 py-3 font-bold text-gold hover:bg-amber-50">Explore Plans</button>
+</section>
+
+<section id="teammates" class="grid gap-4 md:grid-cols-2">
+ <div class="card"><p class="text-3xl">👥</p><h2 class="mt-2 text-xl font-extrabold text-ink">Connect with Students Like You</h2><p class="mt-1 text-sm text-slate-600">Find teammates with matching interests, skills and goals.</p><a href="community.html" class="btn mt-4 inline-block">Find Teammates</a></div>
+ <div class="space-y-3">
+  <div class="card border-l-4 border-l-gold py-4"><p class="font-bold text-ink">Structure your literature review</p><p class="text-sm text-slate-600">Group sources by theme, not by date.</p></div>
+  <div class="card border-l-4 border-l-royal py-4"><p class="font-bold text-ink">Set micro-milestones</p><p class="text-sm text-slate-600">Break each chapter into small tasks.</p></div>
+ </div>
+</section>
+</main>
+
+<footer class="border-t border-slate-200 bg-white py-6 text-center text-sm text-slate-500 lg:mr-60">
+ <nav class="mb-2 flex flex-wrap justify-center gap-5 font-semibold"><a href="about.html">About</a><a href="settings.html">Terms</a><a href="settings.html">Privacy</a><a href="help-center.html">Help Center</a><a href="community.html">Community</a></nav>
+ <p>&copy; 2026 ProjectPal. Built for academic success.</p>
+</footer>
+
+<script src="projectpal.js"></script>
+<script>
+var $=function(i){return document.getElementById(i)},H=function(e,h){e.innerHTML=h};
+function bar(l,v,c){return '<div><div class="flex justify-between text-xs font-semibold"><span>'+l+'</span><span>'+v+'/10</span></div><div class="bar mt-1"><i style="width:0;background:'+c+'" data-w="'+v*10+'"></i></div></div>'}
+function grow(root){setTimeout(function(){root.querySelectorAll('i[data-w]').forEach(function(i){i.style.width=i.dataset.w+'%'})},60)}
+// floating topics
+['AI Attendance System','Smart Agriculture Monitor','Hospital Management System','Student Result Portal','Inventory Management System','E-Commerce Platform'].forEach(function(t,i){var c=document.createElement('span');c.className='chip';c.textContent=t;c.style.top=(8+i*14)+'%';c.style.right=(i%2?'4%':'18%');c.style.animationDelay=(-i*1.5)+'s';c.style.opacity=window.innerWidth<700?'.35':'1';$('chips').appendChild(c)});
+// video
+$('vbox').addEventListener('click',function(){var v=document.createElement('video');v.src='intro-video.mp4';v.controls=true;v.autoplay=true;v.playsInline=true;v.className='h-full w-full';this.innerHTML='';this.appendChild(v);this.style.cursor='default'},{once:true});
+// profile greeting + todo
+var P=ProjectPal.getProfile(),hr=new Date().getHours();
+$('greet').textContent=(hr<12?'Good morning':hr<17?'Good afternoon':'Good evening')+', '+(P.preferredName||P.name||'there').split(' ')[0]+' 👋';
+H($('todo'),['Finish Chapter 2 draft','Review 3 journals','Complete Milestone 5'].map(function(t){return '<li><label class="flex items-center gap-2"><input type="checkbox"> '+t+'</label></li>'}).join(''));
+// health
+var HM=[['Documentation',8],['Milestones',9],['Research Progress',7.5],['Development Status',8.5],['Team Activity',9]],sum=0;
+H($('hm'),HM.map(function(m){sum+=m[1];return bar(m[0],m[1],'#14B8A6')}).join(''));grow($('hm'));
+(function(){var t=Math.round(sum/HM.length*10),n=0,e=$('hs'),iv=setInterval(function(){n+=2;if(n>=t){n=t;clearInterval(iv)}e.textContent=n},20)})();
+// countdown
+var key='ppDefenseDate',sv=localStorage.getItem(key),d0=new Date();d0.setDate(d0.getDate()+82);
+$('cdDate').value=sv||d0.toISOString().slice(0,10);
+$('cdDate').addEventListener('change',function(){try{localStorage.setItem(key,this.value)}catch(e){}tick()});
+function tick(){var t=new Date($('cdDate').value+'T09:00:00')-new Date();if(isNaN(t)||t<0)t=0;$('cdD').textContent=Math.floor(t/864e5);$('cdH').textContent=Math.floor(t%864e5/36e5);$('cdM').textContent=Math.floor(t%36e5/6e4)}
+tick();setInterval(tick,30000);
+// idea generator
+var DEPTS=['Computer Science','Engineering','Business Administration','Health Sciences','Education','Guidance and Counselling','Other'];
+var IDEAS=[['AI','AI Attendance System','Manual roll calls waste lecture time and are easy to fake.',9,7,'React + Node.js + MongoDB','10-12 weeks'],['AI','Plagiarism-Aware Writing Helper','Students cannot tell when their writing is too close to a source.',8,8,'Python + NLP + React','12 weeks'],['AI','AI Crop Disease Detector','Farmers spot plant diseases too late.',9,8,'Python + TensorFlow Lite + Flutter','12-14 weeks'],['IoT','Smart Agriculture Monitor','Small farmers cannot track soil moisture and weather in real time.',8,8,'ESP32 + MQTT + Node.js + React','12-14 weeks'],['IoT','Smart Classroom Energy Saver','Lights and fans stay on in empty rooms.',7,6,'Arduino + Firebase + Flutter','8-10 weeks'],['Health','Hospital Management System','Patient records and appointments are scattered across paper files.',6,6,'Laravel + MySQL','8-10 weeks'],['Health','Clinic Queue Tracker','Patients wait for hours without knowing their turn.',6,5,'React + Firebase','8 weeks'],['Education','Student Result Portal','Result checking is slow and error-prone.',5,4,'HTML + PHP + MySQL','6-8 weeks'],['Education','Smart Study Planner','Students struggle to plan revision around deadlines.',7,5,'React + Node.js + MongoDB','8 weeks'],['Business','Inventory Management System','Small shops lose money on stock they cannot track.',6,5,'React + Firebase','8 weeks'],['Business','E-Commerce Platform with AI Recommendations','Local sellers lack tools that suggest products to buyers.',8,7,'Next.js + Node.js + PostgreSQL','12 weeks'],['Security','Campus Visitor Tracking App','Campus gates have no reliable visitor log.',6,5,'Flutter + Firebase','8 weeks']];
+var INT=[];IDEAS.forEach(function(i){if(INT.indexOf(i[0])<0)INT.push(i[0])});
+H($('gd'),DEPTS.map(function(x){return '<option>'+x+'</option>'}).join(''));H($('gi'),INT.map(function(x){return '<option>'+x+'</option>'}).join(''));
+var gn=0;
+$('gen').addEventListener('click',function(){
+ var pool=IDEAS.filter(function(i){return i[0]===$('gi').value}),i=pool[gn++%pool.length],lv=$('gl').value,adj=lv==='Beginner'?-1:lv==='Advanced'?1:0,df=Math.max(1,Math.min(10,i[4]+adj));
+ H($('genOut'),'<div class="fade rounded-2xl border border-teal-200 bg-teal-50 p-5"><p class="text-xl font-extrabold text-ink">'+i[1]+'</p><p class="mt-1 text-slate-700">'+i[2]+' A good fit for '+$('gd').value+' students.</p><div class="mt-4 grid gap-3 sm:grid-cols-2">'+bar('Innovation',i[3],'#0F766E')+bar('Difficulty',df,'#D97706')+'</div><p class="mt-4 text-sm"><b>Suggested stack:</b> '+i[5]+'</p><p class="text-sm"><b>Estimated time:</b> '+i[6]+'</p><p class="mt-3 text-xs text-slate-500">Press the button again for another idea.</p></div>');grow($('genOut'))});
+// rate my idea
+$('rate').addEventListener('click',function(){
+ var t=$('ri').value.trim();if(t.split(/\s+/).length<3){ProjectPal.showToast('Describe your idea in a few words first.',{type:'warning'});return}
+ var l=t.toLowerCase(),w=t.split(/\s+/).length,k=function(a){return a.filter(function(x){return l.indexOf(x)>-1}).length},cl=function(n){return Math.max(1,Math.min(10,Math.round(n)))};
+ var s={inn:cl(4+k(['ai','machine','iot','blockchain','vision','predict','nlp','sensor','real-time','smart','face'])*2+(w>8?1:0)),cx:cl(3+w/4+k(['database','mobile','api','cloud','integration','verify'])),df:cl(3+Math.min(4,w/5)+k(['problem','improve','reduce','detect','track','verify'])),ind:cl(4+k(['hospital','school','farm','bank','health','payment','logistics','agric','retail','security','voting','vote'])*2)};
+ var tips=[];if(w<8)tips.push('Add who it helps and the exact problem it fixes.');if(s.inn<7)tips.push('Add one smart feature such as prediction, detection or automation.');if(s.df<7)tips.push('State how you will measure success so you can defend it.');if(!tips.length)tips.push('Strong start. Compare it with two existing systems to show your gap.');
+ H($('rateOut'),'<div class="fade grid gap-3 sm:grid-cols-2">'+bar('Innovation',s.inn,'#0F766E')+bar('Complexity',s.cx,'#D97706')+bar('Defense potential',s.df,'#1E3A8A')+bar('Industry relevance',s.ind,'#14B8A6')+'</div><ul class="mt-4 list-disc pl-5 text-sm text-slate-700">'+tips.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul>');grow($('rateOut'))});
+// roadmap
+var RM=[['💡','Idea','Pick a topic that solves a real problem and fits your skills.','Choosing something too big to finish.','Write the problem in one sentence before anything else.'],['📝','Proposal','Set your objectives, scope and plan for your supervisor.','Vague objectives that cannot be measured.','Keep each objective to one testable sentence.'],['📚','Literature Review','Read what already exists and find the gap you will fill.','Listing papers instead of comparing them.','Group sources by theme and note each one\'s gap.'],['💻','Development','Build the system in small working pieces.','Leaving all coding to the last month.','Finish one feature fully before the next.'],['🧪','Testing','Check that it works with real users and real data.','Testing only the happy path.','Write five tests that try to break it.'],['📄','Documentation','Write up chapters, results and conclusions.','Writing everything in the final week.','Draft a little after every milestone.'],['🎤','Defense','Present your work and answer panel questions.','Memorising slides without understanding them.','Practise the three hardest questions out loud.']];
+H($('rm'),RM.map(function(r,i){return '<button class="stage" data-i="'+i+'">'+r[0]+' '+r[1]+'</button>'}).join(''));
+function stage(i){var r=RM[i];[].forEach.call($('rm').children,function(b,x){b.classList.toggle('on',x===i)});H($('rmOut'),'<div class="fade"><p class="text-lg font-extrabold text-ink">'+r[0]+' '+r[1]+'</p><p class="mt-2">'+r[2]+'</p><p class="mt-3 text-sm"><b class="text-red-600">Common mistake:</b> '+r[3]+'</p><p class="mt-1 text-sm"><b class="text-ocean">Tip:</b> '+r[4]+'</p></div>')}
+$('rm').addEventListener('click',function(e){var b=e.target.closest('.stage');if(b)stage(+b.dataset.i)});stage(0);
+// similar students
+H($('sim'),[['Samuel Johnson','Computer Science','Frontend Developer','AI projects',95],['Ngozi Eze','Engineering','IoT Builder','Smart systems',88],['David Musa','Business Admin','Data Analyst','E-commerce',81]].map(function(s){return '<div class="flex items-center justify-between gap-3 rounded-xl border border-slate-200 p-3"><div><p class="font-bold text-ink">'+s[0]+' <span class="text-sm font-bold text-ocean">'+s[4]+'% match</span></p><p class="text-xs text-slate-500">'+s[1]+' · '+s[2]+' · Interested in '+s[3]+'</p></div><button class="conn rounded-lg border border-ocean px-3 py-1.5 text-sm font-bold text-ocean hover:bg-teal-50">Connect</button></div>'}).join(''));
+$('sim').addEventListener('click',function(e){if(e.target.classList.contains('conn')){e.target.textContent='Requested';e.target.disabled=true;ProjectPal.showToast('Connection request noted (demo).',{type:'success'})}});
+// stories
+var ST=[['Amara Okafor','Computer Science, UI/UX Design','ProjectPal helped me organize my thoughts and turn chaos into a structured project plan.'],['Tunde Bello','Engineering, IoT System','The milestone tracker kept me accountable. I finished 2 weeks ahead of schedule!']],si=0;
+H($('dots'),ST.map(function(x,i){return '<button aria-label="Story '+(i+1)+'" class="h-2.5 w-2.5 rounded-full bg-slate-300" data-i="'+i+'"></button>'}).join(''));
+function story(i){si=i;var s=ST[i];H($('story'),'<p class="text-gold">★★★★★</p><p class="mt-2 text-lg text-ink">"'+s[2]+'"</p><p class="mt-3 text-sm font-bold">'+s[0]+'</p><p class="text-xs text-slate-500">'+s[1]+'</p>');[].forEach.call($('dots').children,function(d,x){d.style.background=x===i?'#0F766E':'#cbd5e1'})}
+$('dots').addEventListener('click',function(e){if(e.target.dataset.i)story(+e.target.dataset.i)});story(0);setInterval(function(){story((si+1)%ST.length)},6000);
+// feed
+var FD=['John completed Chapter 3','Mary generated 5 project ideas','David submitted a proposal','Ada reached Milestone 4','Emeka booked a supervisor session'],fi=0;
+function feed(){var li=document.createElement('li');li.className='fade rounded-lg bg-slate-50 px-3 py-2';li.textContent='● '+FD[fi++%FD.length];$('feed').prepend(li);while($('feed').children.length>4)$('feed').lastChild.remove()}
+feed();feed();feed();setInterval(feed,4000);
+// stats
+var SS=[[5000,'+','Projects Created'],[1200,'+','Students'],[300,'+','Completed Projects'],[95,'%','Completion Rate']];
+H($('stats'),SS.map(function(s){return '<div><b class="text-3xl text-royal" data-t="'+s[0]+'" data-s="'+s[1]+'">0</b><p class="text-xs text-slate-500">'+s[2]+'</p></div>'}).join(''));
+new IntersectionObserver(function(en,ob){en.forEach(function(e){if(!e.isIntersecting)return;ob.disconnect();document.querySelectorAll('[data-t]').forEach(function(b){var t=+b.dataset.t,n=0,st=Math.ceil(t/40),iv=setInterval(function(){n=Math.min(t,n+st);b.textContent=n.toLocaleString()+b.dataset.s;if(n>=t)clearInterval(iv)},30)})})}).observe($('stats'));
+$('plans').addEventListener('click',function(){ProjectPal.showToast('Plans are coming soon. Contact hello@projectpal.com to be first.',{type:'info',duration:4500})});
+</script>
 </body>
 </html>

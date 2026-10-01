@@ -225,7 +225,37 @@
     }
   }
 
+  function createSidebar() {
+    var items = [['home.html','⌂','Home'],['dashboard.html','▣','Workspace'],['milestone-tracker.html','✓','Milestones'],['goal-tracker.html','◎','Goals'],['community.html','👥','Community'],['workspace-video.html','▶','Watch Tutorial'],['about.html','ℹ','About']];
+    var cur = location.pathname.split('/').pop() || 'index.html';
+    var a = document.createElement('aside');
+    a.className = 'hidden lg:flex fixed right-0 top-0 z-40 h-full w-60 flex-col border-l border-slate-200 bg-white p-4';
+    a.setAttribute('aria-label', 'Main');
+    a.innerHTML = '<p class="mb-4 px-3 text-xs font-bold uppercase tracking-wider text-slate-400">ProjectPal</p>' + items.map(function (i) {
+      var on = i[0] === cur;
+      return '<a href="' + i[0] + '" class="mb-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold ' + (on ? 'border-l-4 border-blue-700 bg-blue-50 text-blue-800' : 'text-slate-600 hover:bg-slate-50') + '"><span>' + i[1] + '</span>' + i[2] + '</a>';
+    }).join('') + '<div class="mt-auto border-t border-slate-100 pt-3"><a href="settings.html" class="mb-1 block rounded-xl px-3 py-2.5 text-sm font-bold text-slate-600 hover:bg-slate-50">⚙ Settings</a><button id="ppLogout" class="w-full rounded-xl px-3 py-2.5 text-left text-sm font-bold text-red-600 hover:bg-red-50">Logout</button></div>';
+    document.body.appendChild(a);
+    document.getElementById('ppLogout').addEventListener('click', function () {
+      try { localStorage.removeItem('projectpalProfile'); sessionStorage.clear(); } catch (e) {}
+      window.location.href = 'login.html';
+    });
+  }
+
+  function createHistoryNav() {
+    if (document.querySelector('[data-hist]')) return;
+    var w = document.createElement('div');
+    w.className = 'fixed bottom-6 left-6 z-[90] flex gap-2';
+    var cls = 'grid h-10 w-10 place-items-center rounded-xl bg-white text-lg font-bold text-slate-700 shadow-lg ring-1 ring-slate-200 hover:bg-slate-50';
+    w.innerHTML = '<button type="button" aria-label="Go back" title="Back" class="' + cls + '">&larr;</button><button type="button" aria-label="Go forward" title="Forward" class="' + cls + '">&rarr;</button>';
+    w.firstChild.addEventListener('click', function () { window.history.back(); });
+    w.lastChild.addEventListener('click', function () { window.history.forward(); });
+    document.body.appendChild(w);
+  }
+
   function init() {
+    createHistoryNav();
+    if (document.body.hasAttribute('data-sidebar')) createSidebar();
     createNav();
     setupPageTransition();
     updateDOMFromProfile();

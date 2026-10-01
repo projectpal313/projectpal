@@ -291,7 +291,12 @@
         }
 
         localStorage.setItem('projectpalProfile', JSON.stringify(profile));
-        window.location.href = 'welcome-hub.html';
+        var dest = 'welcome-hub.html';
+        try {
+          var pr = await supabase.from('user_profiles').select('id').eq('id', user.id).maybeSingle();
+          if (!pr.error && !pr.data) dest = 'edit-profile.html?first=1';
+        } catch (x) {}
+        window.location.href = dest;
       } catch (e) {
         err.textContent = e.message || 'Login failed. Please try again.';
         err.classList.remove('hidden');
