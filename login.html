@@ -46,7 +46,7 @@
     .tab-active { background: #0F766E; color: white; }
     .tab-inactive { background: transparent; color: #94A3B8; }
     .tab-inactive:hover { color: #E2E8F0; }
-      .bl{display:inline-block;opacity:0;will-change:transform,opacity,filter;transition:opacity .8s ease,transform 1.4s cubic-bezier(.22,1,.36,1),filter .8s ease}
+      .bl{display:inline-block;opacity:0;transition:opacity .25s ease}
     @media (prefers-reduced-motion:reduce){.bl{transition:opacity .3s ease}}
   </style>
 </head>
@@ -156,56 +156,49 @@
       var stage = document.getElementById('brandStage');
       var word = document.getElementById('brandWord');
       var line = document.getElementById('brandLine');
-      var W = window.innerWidth, H = window.innerHeight;
       stage.classList.remove('hidden'); stage.classList.add('flex');
       requestAnimationFrame(function () { stage.style.opacity = '1'; });
-      var letters = 'PROJECTPAL'.split('').map(function (ch) {
+      var letters = 'ProjectPal'.split('').map(function (ch) {
         var el = document.createElement('span');
         el.className = 'bl'; el.textContent = ch;
-        var dx = (Math.random() - .5) * W * .28, dy = (Math.random() - .5) * H * .4;
-        el.dataset.from = 'translate(' + dx + 'px,' + dy + 'px)';
-        el.style.transform = el.dataset.from + ' scale(1.9)'; el.style.filter = 'blur(14px)';
         word.appendChild(el); return el;
       });
-      var step = 230;
+      var step = 170, start = 400;
       letters.forEach(function (el, i) {
-        setTimeout(function () {
-          el.style.opacity = '1'; el.style.filter = 'blur(0)';
-          el.style.transform = el.dataset.from + ' scale(1.08)';
-        }, 500 + i * step);
+        setTimeout(function () { el.style.opacity = '1'; }, start + i * step);
       });
-      var assembleAt = 500 + letters.length * step + 500;
-      setTimeout(function () {
-        letters.forEach(function (el) { el.style.transform = 'translate(0,0) scale(1)'; });
-        line.style.width = '70%';
-      }, assembleAt);
-      setTimeout(function () { stage.style.opacity = '0'; }, assembleAt + 2900);
+      var doneAt = start + letters.length * step;
+      setTimeout(function () { line.style.width = '70%'; }, doneAt + 100);
+      setTimeout(function () { stage.style.opacity = '0'; }, doneAt + 1500);
       setTimeout(function () {
         stage.classList.add('hidden'); stage.classList.remove('flex');
         revealAuthScreen();
-      }, assembleAt + 3750);
+      }, doneAt + 2300);
     }
 
     var introDone = false;
     function endIntro() {
       if (introDone) return; introDone = true;
-      sessionStorage.setItem('ppIntroPlayed', '1');
       var intro = document.getElementById('introStage');
       try { document.getElementById('introVideo').pause(); } catch (e) {}
       intro.style.transition = 'opacity .6s ease'; intro.style.opacity = '0';
       setTimeout(function () { intro.style.display = 'none'; playBrandReveal(); }, 600);
     }
 
-    if (sessionStorage.getItem('ppIntroPlayed')) {
-      revealAuthScreen();
-    } else {
-      var iv = document.getElementById('introVideo');
-      iv.addEventListener('ended', endIntro);
-      iv.addEventListener('error', endIntro);
-      document.getElementById('skipIntro').addEventListener('click', endIntro);
-      var p = iv.play(); if (p && p.catch) p.catch(endIntro);
-      setTimeout(function () { if (!iv.currentTime) endIntro(); }, 6000);
-    }
+    var iv = document.getElementById('introVideo');
+    var started = false;
+    iv.addEventListener('playing', function () { started = true; });
+    iv.addEventListener('ended', endIntro);
+    iv.addEventListener('error', endIntro);
+    document.getElementById('skipIntro').addEventListener('click', endIntro);
+    var p = iv.play();
+    if (p && p.catch) p.catch(function () {
+      // Phone blocked autoplay: keep the welcome panel and let the first tap start the video
+      var tap = function () { iv.play().catch(endIntro); };
+      document.getElementById('introStage').addEventListener('click', tap, { once: true });
+    });
+    // Only give up if the video never starts (slow network)
+    setTimeout(function () { if (!started) endIntro(); }, 15000);
 
     // Tab switching
     var loginTab = document.getElementById('loginTab');
