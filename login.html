@@ -289,6 +289,8 @@
           var pr = await sb.from('user_profiles').select('id').eq('id', user.id).maybeSingle();
           if (!pr.error && !pr.data) dest = 'edit-profile.html?first=1';
         } catch (x) {}
+        var nx = new URLSearchParams(location.search).get('next');
+        if (nx === 'quikaz' && dest === 'welcome-hub.html') dest = 'quikaz.html';
         window.location.href = dest;
       } catch (e) {
         err.textContent = e.message || 'Login failed. Please try again.';

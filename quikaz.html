@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QuikAz — ProjectPal</title>
+<title>QuikAz — your AI study assistant</title>
+<meta property="og:title" content="QuikAz — your AI study assistant">
+<meta property="og:description" content="Essays, research, science and quick answers for university students.">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;600&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
@@ -22,6 +25,7 @@
       <button class="menu" id="menu" aria-label="Open menu">Menu</button>
       <span class="chip">QuikAz Credits <b id="cr">150</b></span>
       <span class="chip">AutoCAD Units <b id="cad">0</b></span>
+      <button class="btn ghost" id="share">Share</button>
       <button class="btn" id="buy">Buy AutoCAD Units</button>
     </header>
     <main>
@@ -49,6 +53,7 @@
 </div>
 <div class="modal" id="store"><div class="card"><h2>AutoCAD Units</h2><p>Special bundle: <b style="color:var(--gold)">500 units for ₦1,000</b> (₦2.00 per unit).</p><div class="row"><button class="btn" id="pay">Buy for ₦1,000</button><button class="btn ghost" data-close>Cancel</button></div><p class="note">Demo mode: no payment is taken yet. Connect Paystack to charge real payments.</p></div></div>
 <div class="modal" id="dup"><div class="card"><h2>Similar question detected within your department.</h2><p>Another student asked something close to this. Rephrase it so your answer is unique to you.</p><div class="row"><button class="btn" id="remodel">Rephrase uniquely</button><button class="btn ghost" id="go">Ask anyway</button><button class="btn ghost" data-close>Cancel</button></div></div></div>
+<div class="modal" id="login"><div class="card"><h2>Log in to use QuikAz</h2><p>Create a free ProjectPal account or log in to get your credits.</p><div class="row"><a class="btn" href="login.html?next=quikaz" style="text-decoration:none">Log in or sign up</a><button class="btn ghost" data-close>Close</button></div></div></div>
 <div class="toast" id="toast" role="status"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>

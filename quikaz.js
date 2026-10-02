@@ -23,6 +23,7 @@ async function callAI(p){
  let tok='';try{const k=Object.keys(localStorage).find(x=>/^sb-.*-auth-token$/.test(x));tok=JSON.parse(localStorage.getItem(k)).access_token||''}catch(e){}
  let r=null;try{r=await fetch('/.netlify/functions/quikaz',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+tok},body:JSON.stringify(p)})}catch(e){}
  if(r&&r.ok){const d=await r.json();return d.answer}
+ if(r&&r.status===401){$('#login').classList.add('open');throw new Error('Log in to continue.')}
  if(r&&r.status!==404){const d=await r.json().catch(()=>({}));throw new Error(d.error||'The AI is unavailable. Try again.')}
  return `## ${{brainstorm:'Topic ideas',audit:'Review and audit'}[p.task]||'Answer'}\n\nDemo answer. Connect a backend to get real responses. Inline math works: the quadratic formula is $x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}$.\n\n$$E=mc^2$$\n\n| Item | Detail |\n|---|---|\n| Mode | ${p.mode} |\n| Model weight | ${p.model} |\n\n- Point one\n- Point two\n\n**Your input:** ${p.text.slice(0,200)}`}
 // Small markdown renderer (headings, bold, italic, lists, tables). Math is kept for KaTeX.
@@ -70,6 +71,7 @@ $$('[data-close]').forEach(b=>b.onclick=()=>b.closest('.modal').classList.remove
 $('#pdf').onclick=()=>window.print();
 $('#doc').onclick=()=>{const h='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><style>@page{margin:1in}body{font:12pt "Times New Roman",serif;line-height:1.5}table{border-collapse:collapse}td,th{border:1px solid #000;padding:4px}</style></head><body>'+$('#paper').innerHTML+'</body></html>';
  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff',h],{type:'application/msword'}));a.download='quikaz-answer.doc';a.click()};
+$('#share').onclick=async()=>{const u=location.origin+'/quikaz';try{if(navigator.share)await navigator.share({title:'QuikAz',text:'Try QuikAz, an AI study assistant for university students.',url:u});else{await navigator.clipboard.writeText(u);toast('Link copied.')}}catch(e){}};
 $('#menu').onclick=()=>$('#side').classList.toggle('open');
 paint();
 })();
