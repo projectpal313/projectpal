@@ -30,8 +30,7 @@
     { href: 'literature-review.html', label: 'Literature' },
     { href: 'research-notes.html', label: 'Research' },
     { href: 'citation-manager.html', label: 'Citations' },
-    { href: 'milestone-tracker.html', label: 'Milestones' },
-    { href: 'goal-tracker.html', label: 'Goals' },
+    { href: 'tracker.html', label: 'Scholar Tracker' },
     { href: 'workspace.html', label: 'Academic Workspace' },
     { href: 'workspace-video.html', label: 'Workspace Video' },
     { href: 'quikaz.html', label: 'QuikAz' },
@@ -226,7 +225,7 @@
   }
 
   function createSidebar() {
-    var items = [['home.html','⌂','Home'],['dashboard.html','▣','Workspace'],['milestone-tracker.html','✓','Milestones'],['goal-tracker.html','◎','Goals'],['community.html','👥','Community'],['workspace-video.html','▶','Watch Tutorial'],['about.html','ℹ','About']];
+    var items = [['home.html','⌂','Home'],['dashboard.html','▣','Workspace'],['quikaz.html','✦','QuikAz'],['tracker.html','◎','Scholar Tracker'],['community.html','👥','Community'],['workspace-video.html','▶','Watch Tutorial'],['about.html','ℹ','About']];
     var cur = location.pathname.split('/').pop() || 'index.html';
     var a = document.createElement('aside');
     a.className = 'hidden lg:flex fixed right-0 top-0 z-40 h-full w-60 flex-col border-l border-slate-200 bg-white p-4';
