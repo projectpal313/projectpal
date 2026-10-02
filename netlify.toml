@@ -1,0 +1,4 @@
+[build.environment]
+  # The Supabase project URL is public by design (used client-side with the anon key),
+  # so exclude it from secrets scanning. Secret keys remain scanned.
+  SECRETS_SCAN_OMIT_KEYS = "SUPABASE_URL"
