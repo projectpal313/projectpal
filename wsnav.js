@@ -1,10 +1,11 @@
 /* ProjectPal workspace menu: Dashboard, Resources, Academic Area, Final Project Lab */
 (function () {
   var items = [
+    ['home.html', '⌂', 'Return home'],
     ['dashboard.html', '▦', 'Dashboard'],
     ['resources.html', '▤', 'Resources'],
-    ['workspace.html', '📖', 'Academic Workspace'],
-    ['final-lab.html', '✦', 'Final Chapter Lab']
+    ['workspace.html', '📖', 'Academic Area'],
+    ['final-lab.html', '✦', 'Final Project Lab']
   ];
   var key = function (p) { return (p || '').replace(/\.html$/, ''); };
   var here = key(location.pathname.split('/').pop());
@@ -36,14 +37,12 @@
       while (document.body.firstChild) main.appendChild(document.body.firstChild);
       wrap.appendChild(aside); wrap.appendChild(main); document.body.appendChild(wrap);
     }
-    // Milestones and Goals belong to the Home menu, not the workspace menu
-    [].forEach.call(document.querySelectorAll('aside a[href="milestone-tracker.html"],aside a[href="goal-tracker.html"]'), function (a) { a.remove(); });
     var bar = document.createElement('nav'); bar.id = 'wsBar'; bar.innerHTML = bottom(); document.body.appendChild(bar);
     // Dashboard covers every workspace area
     if (here === 'dashboard') {
       var host = document.querySelector('.dot-grid');
       if (host) {
-        var d = [['resources.html', '▤', 'Resources', 'Materials and similar projects recommended for your topic.'], ['workspace.html', '📖', 'Academic Workspace', 'Where the real work happens: learn each chapter, write it, and get AI help.'], ['final-lab.html', '✦', 'Final Chapter Lab', 'Check, rewrite, format and download your finished project.']];
+        var d = [['resources.html', '▤', 'Resources', 'Books, materials and similar projects to learn from.'], ['workspace.html', '📖', 'Academic Area', 'Where the real work happens: scope, literature, methodology and drafting.'], ['final-lab.html', '✦', 'Final Project Lab', 'Check readiness and export when everything is done.']];
         var sec = document.createElement('section'); sec.className = 'mt-8';
         sec.innerHTML = '<h2 class="text-xl font-extrabold text-ink">Your workspace</h2><div class="mt-4 grid gap-4 sm:grid-cols-3">' + d.map(function (x) {
           return '<a href="' + x[0] + '" class="rounded-xl border border-slate-200 bg-white p-5 shadow-soft hover:border-ocean"><p class="text-2xl">' + x[1] + '</p><h3 class="mt-2 font-bold text-ink">' + x[2] + '</h3><p class="mt-1 text-sm text-slate-500">' + x[3] + '</p></a>';
